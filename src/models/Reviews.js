@@ -4,9 +4,20 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
     // defino el modelo
     sequelize.define('reviews', {
-        name: {
-            type: DataTypes.STRING,
+        content: {
+            type: DataTypes.TEXT,
             allowNull: false,
         },
+        rating:{
+            type: DataTypes.INTEGER,
+            validate:{
+                min: 1,
+                max: 5
+            },
+        },
+        id_product:{
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
     });
 };
