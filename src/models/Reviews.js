@@ -15,10 +15,6 @@ module.exports = (sequelize) => {
                 max: 5
             },
             allowNull: false
-        },
-        id_product:{
-            type: DataTypes.INTEGER,
-            allowNull: false
         }
     });
 };

@@ -4,16 +4,16 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
     // defino el modelo
     sequelize.define('users', {
-        name: {
-            type: DataTypes.STRING,
+        first_name: {
+            type: DataTypes.STRING(30),
             allowNull: false,
         },
         last_name:{
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(30),
             allowNull: false
         },
-        mail:{
-            type: DataTypes.STRING,
+        email:{
+            type: DataTypes.STRING(80),
             validate:{
                 isEmail: true,
             },
@@ -21,42 +21,41 @@ module.exports = (sequelize) => {
             unique: true
         },
         password:{
-            type: DataTypes.STRING(12),
+            type: DataTypes.STRING(64),
             validate:{
                 isAlphanumeric: true,
             },
             allowNull: false
         },
-        id_rol:{
-            type: DataTypes.INTEGER,
+        role:{
+            type: DataTypes.ENUM('Admin', 'User', 'Guest'),
             allowNull: false
         },
         address:{
-            type: DataTypes.TEXT,
-            allowNull: false
+            type: DataTypes.STRING(40),
+            allowNull: true
         },
         cellphone:{
             type: DataTypes.INTEGER,
             validate:{
                 isNumeric: true, 
             },
-            allowNull: false
+            allowNull: true
         },
-        location:{
-            type: DataTypes.STRING,
-            allowNull: false
+        location:{//municipio y/o localidad
+            type: DataTypes.STRING(30),
+            allowNull: true
         },
-        department:{
-            type: DataTypes.STRING,
-            allowNull: false
+        department:{//estado provincial
+            type: DataTypes.STRING(30),
+            allowNull: true
         },
-        zip_code:{
-            type: DataTypes.STRING,
-            allowNull: false
+        zip_code:{//codigo postal
+            type: DataTypes.STRING(20),
+            allowNull: true
         },
         reset_password:{
             type: DataTypes.BOOLEAN,
-            allowNull: false,
             defaultValue: false
         }
     });

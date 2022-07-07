@@ -5,25 +5,31 @@ module.exports = (sequelize) => {
     // defino el modelo
     sequelize.define('products', {
         name: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(30),
             allowNull: false,
             unique: true
         },
-        description:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        technical_description:{
+        description:{//prospecto comercial
             type: DataTypes.TEXT,
             allowNull: false
         },
-        Price:{
+        technical_especification:{//caracyerísticas tecnicas del producto
+            type: DataTypes.TEXT,
+            allowNull: false
+        },
+        price:{
             type: DataTypes.FLOAT,
+            validate:{
+                min: 1,
+            },
             allowNull: false
         },
         stock:{
             type: DataTypes.INTEGER,
-            allowNull: false
+            validate:{
+                min: 0
+            },
+            defaultValue: 0,
         }
     });
 };

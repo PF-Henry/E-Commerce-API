@@ -10,13 +10,9 @@ module.exports = (sequelize) => {
             default: DataTypes.NOW
         },
         sell_time:{
-            type: DataTypes.DATE,
+            type: DataTypes.TIME,
             allowNull: false,
             default: DataTypes.NOW
-        },
-        id_users:{
-            type: DataTypes.INTEGER,
-            allowNull: false
         },
         total_sell:{
             type: DataTypes.FLOAT,
@@ -26,7 +22,7 @@ module.exports = (sequelize) => {
             allowNull: false
         },
         state:{
-            type: DataTypes.ENUM('creada', 'procesando', 'cancelada', 'completa'),
+            type: DataTypes.ENUM('created', 'processing', 'cancelled', 'complete'),
             allowNull: false
         }
     });
