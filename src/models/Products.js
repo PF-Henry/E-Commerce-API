@@ -9,24 +9,24 @@ module.exports = (sequelize) => {
             allowNull: false,
             unique: true
         },
-        description:{//prospecto comercial
+        description: { //prospecto comercial
             type: DataTypes.TEXT,
             allowNull: false
         },
-        technical_especification:{//caracyerísticas tecnicas del producto
+        technical_especification: { //caracyerísticas tecnicas del producto
             type: DataTypes.TEXT,
             allowNull: false
         },
-        price:{
+        price: {
             type: DataTypes.FLOAT,
-            validate:{
+            validate: {
                 min: 1,
             },
             allowNull: false
         },
-        stock:{
+        stock: {
             type: DataTypes.INTEGER,
-            validate:{
+            validate: {
                 min: 0
             },
             defaultValue: 0,

@@ -1,4 +1,4 @@
-const { Router } = require('express');
+const express = require('express');
 const routerReviews = require('./reviews');
 const routerOrders = require('./orders');
 const routerUsers = require('./users');
@@ -7,7 +7,7 @@ const routerBrands = require('./brands');
 const routerProducts = require('./products');
 const routerCategories = require('./categories');
 
-const router = Router();
+const router = express.Router();
 
 // Configurar los routers
 
