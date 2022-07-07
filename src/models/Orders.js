@@ -4,9 +4,26 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
     // defino el modelo
     sequelize.define('orders', {
-        name: {
-            type: DataTypes.STRING,
+        sell_date: {
+            type: DataTypes.DATEONLY,
             allowNull: false,
+            default: DataTypes.NOW
         },
+        sell_time:{
+            type: DataTypes.TIME,
+            allowNull: false,
+            default: DataTypes.NOW
+        },
+        total_sell:{
+            type: DataTypes.FLOAT,
+            validate:{
+                min: 0
+            },
+            allowNull: false
+        },
+        state:{
+            type: DataTypes.ENUM('created', 'processing', 'cancelled', 'complete'),
+            allowNull: false
+        }
     });
 };

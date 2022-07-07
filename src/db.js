@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+const Brands = require('./models/Brands');
 const {
     DB_USER,
     DB_PASSWORD,
@@ -55,8 +56,8 @@ Products.belongsToMany(Orders, { through: 'Orders_Products' });
 Users.belongsToMany(Products, { through: 'Users_Products' }); //** Favorites */
 Products.belongsToMany(Users, { through: 'Users_Products' });
 
-Users.hasOne(Roles);
-Roles.belongsToMany(Users);
+Products.hasOne(Brands);
+Brands.belongsToMany(Products);
 
 
 module.exports = {
