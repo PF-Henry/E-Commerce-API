@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 
-const { Images } = requiere('../db.js');
+const { Images } = require('../db.js');
 
 
 router.get('/', async(req, res, next) => {
@@ -44,3 +44,5 @@ router.delete('/:id', async(req, res, next) => {
         next(error);
     }
 })
+
+module.exports = router;
