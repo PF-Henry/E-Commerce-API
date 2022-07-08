@@ -1,11 +1,14 @@
 const { Router } = require('express');
 const router = Router();
-const { Brands } = require('../db.js');
+const { Brands, Products } = require('../db.js');
+
 
 
 router.get('/', async(req, res, next) => {
     try {
-        const brands = await Brands.findAll();
+        const brands = await Brands.findAll({
+            include: Products
+        });
         res.status(200).json(brands);
     } catch (error) {
         next(error);
