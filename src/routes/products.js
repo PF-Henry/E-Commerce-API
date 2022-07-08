@@ -7,8 +7,9 @@ const service = new serviceProducts();
 
 
 router.get('/', async(req, res, next) => {
+    const { name, category } = req.query;
     try {
-        const allProducts = await service.getAll();
+        const allProducts = await service.getAll(name, category);
         res.status(200).json(allProducts);
     } catch (error) {
         next(error);
