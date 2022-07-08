@@ -1,15 +1,24 @@
 const { Router } = require('express');
 const router = Router();
-const { Brands, Products } = require('../db.js');
+const serviceBrands = require('../services/Brands');
+const service = new serviceBrands();
+//const { Brands, Products } = require('../db.js');
 
 
 
 router.get('/', async(req, res, next) => {
     try {
-        const brands = await Brands.findAll({
-            include: Products
-        });
-        res.status(200).json(brands);
+        const allBrands = await service.getAll();
+        res.status(200).json(allBrands);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/:id', async(req, res, next) => {
+    try {
+        const brandById = await service.getById(req.params.id);
+        res.status(200).json(brandById);
     } catch (error) {
         next(error);
     }
@@ -17,34 +26,36 @@ router.get('/', async(req, res, next) => {
 
 router.post('/', async(req, res, next) => {
     try {
-        const brand = await Brands.create(req.body);
-        res.status(201).json(brand);
+        const brandCreated = await service.create(req.body);
+        res.status(201).json(brandCreated);
     } catch (error) {
         next(error);
     }
 })
 
-router.put('/:id', async(req, res, next) => {
+
+router.put('/update/:id', async(req, res, next) => {
     try {
-        const brand = await Brands.findByPk(req.params.id);
-        await brand.update(req.body);
+        const {name, image} = req.body;
+        const {id} = req.params
+        const brand = await service.update(id, name, image);
         res.status(200).json(brand);
     } catch (error) {
         next(error);
     }
 })
 
-router.delete('/:id', async(req, res, next) => {
+
+router.delete('/delete/:id', async(req, res, next) => {
     try {
-        const brand = await Brands.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
+        const {id} = req.params;
+        const brand = await service.delete(id);
         res.status(200).json(brand);
     } catch (error) {
         next(error);
     }
 })
+
+
 
 module.exports = router;
