@@ -24,9 +24,28 @@ class serviceProducts {
                                 description: {
                                     [Op.iLike]: `%${name}%`
                                 }
+                            },
+                            {
+                                technical_especification: {
+                                    [Op.iLike]: `%${name}%`
+                                }
                             }
                         ]
                     },
+                    attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId'],
+                    include: [{
+                            model: Categories,
+                            attributes: ['id', 'name']
+                        },
+                        {
+                            model: Brands,
+                            attributes: ['id', 'name']
+                        },
+                        {
+                            model: Images,
+                            attributes: ['id', 'url_image']
+                        }
+                    ]
                 });
                 return response;
             }
@@ -36,7 +55,19 @@ class serviceProducts {
                     where: {
                         name: category
                     },
-                    include: [Products]
+                    include: [{
+                        model: Products,
+                        attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId'],
+                        include: [{
+                                model: Brands,
+                                attributes: ['id', 'name']
+                            },
+                            {
+                                model: Images,
+                                attributes: ['id', 'url_image']
+                            }
+                        ]
+                    }]
                 })
                 return productsByCategory.products;
             }
@@ -45,15 +76,15 @@ class serviceProducts {
                 attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId'],
                 include: [{
                         model: Categories,
-                        attributes: ['name']
+                        attributes: ['id', 'name']
                     },
                     {
                         model: Brands,
-                        attributes: ['name']
+                        attributes: ['id', 'name']
                     },
                     {
                         model: Images,
-                        attributes: ['url_image']
+                        attributes: ['id', 'url_image']
                     }
                 ]
             });
