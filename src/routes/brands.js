@@ -34,7 +34,7 @@ router.post('/', async(req, res, next) => {
 })
 
 
-router.put('/update/:id', async(req, res, next) => {
+router.put('/:id', async(req, res, next) => {
     try {
         const {name, image} = req.body;
         const {id} = req.params
@@ -46,7 +46,7 @@ router.put('/update/:id', async(req, res, next) => {
 })
 
 
-router.delete('/delete/:id', async(req, res, next) => {
+router.delete('/:id', async(req, res, next) => {
     try {
         const {id} = req.params;
         const brand = await service.delete(id);

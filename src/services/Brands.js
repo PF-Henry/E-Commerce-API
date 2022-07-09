@@ -17,7 +17,16 @@ class serviceBrands {
     }
 
     async getById(id) {
-        return await Brands.findByPk(id);
+        try{
+            let brand = await Brands.findByPk(id);
+            if(!brand) {
+                throw {error: "Brand not found"}
+            }
+            return brand
+        }catch(error){
+            return error;
+        }
+        
     }
 
 
@@ -25,7 +34,7 @@ class serviceBrands {
         const { name, image } = brand;
         try {
             if (!name || !image) {
-                throw 'Name or Image is requerid field.';
+                throw {error: 'Name or Image is requerid field.'};
             }
 
             const regBrand = { name, image };
@@ -42,11 +51,15 @@ class serviceBrands {
     async update(id, name, image) {
         try{
             //console.log(id + " " + name + " " + image)
+            let brand = Brands.findByPk(id);
+            if(!brand){
+                throw {error: "Brand not found"}
+            }
             if(!name && !image){
-                return { msg: 'Not found name and image' };
+                throw { error: 'Not found name and image' };
             }
             if(!name){
-                return await Brands.update(
+                let response = await Brands.update(
                     {
                         image: image,
                     },{
@@ -54,10 +67,13 @@ class serviceBrands {
                         id: id,
                     }  
                 }       
-                )        
+                )   
+                if(response[0] === 1){
+                    return {msg:"Update Brand sucessufully"}
+                }     
             }
             if(!image){
-                return await Brands.update(
+                let response = await Brands.update(
                     {
                         name: name,
                     },{
@@ -65,9 +81,12 @@ class serviceBrands {
                         id: id,
                     }  
                 }       
-                )        
+                )  
+                if(response[0] === 1){
+                    return {msg:"Update Brand sucessufully"}
+                }    
             }
-            return await Brands.update(
+            let response = await Brands.update(
             {
                 name: name,
                 image: image
@@ -77,6 +96,14 @@ class serviceBrands {
             }  
         }       
             )
+            console.log(response)
+            if(response[0] === 0){
+                throw {error: "Brand not found"};
+            }
+            if(response[0] === 1){
+                return {msg:"Update Brand sucessufully"}
+            }
+            
         } catch(error){
             return error
         }
@@ -84,11 +111,15 @@ class serviceBrands {
 
     async delete(id) {
         //console.log(id  + " el id es este")
-        return await Brands.destroy({
+        let response = await Brands.destroy({
             where: {
                 id: id
             }
         });
+        if(response === 0){
+            throw {error: "Brand not found"};
+        }
+        return {msg:"Delete Brand sucessufully"}
     }
 }
 
