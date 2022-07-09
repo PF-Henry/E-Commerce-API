@@ -1,4 +1,5 @@
 'use strict';
+const { Op } = require('sequelize');
 
 const { Products, Categories, Brands, Images, Reviews } = require("../db.js");
 
@@ -9,16 +10,25 @@ class serviceProducts {
 
     async getAll(name, category) {
 
-
         try {
             if (name) {
-                return await Products.findAll({
+
+                let response = await Products.findAll({
                     where: {
-                        name: {
-                            [Op.like]: `%${name}%`
-                        }
+                        [Op.or]: [{
+                                name: {
+                                    [Op.iLike]: `%${name}%`
+                                }
+                            },
+                            {
+                                description: {
+                                    [Op.iLike]: `%${name}%`
+                                }
+                            }
+                        ]
                     },
                 });
+                return response;
             }
 
             if (category) {
@@ -53,9 +63,18 @@ class serviceProducts {
     }
 
     async getById(id) {
-        return await Products.findByPk(id, {
-            include: [Categories, Brands, Images, Reviews] //Falta incluir Reviews
-        });
+        try {
+            let product = await Products.findByPk(id, {
+                include: [Categories, Brands, Images, Reviews] //Falta incluir Reviews
+            });
+            if (!product) {
+                throw { error: "Product not found" }
+            }
+            return product
+        } catch (error) {
+            return error;
+        }
+
     }
 
     async create(product) {
@@ -92,8 +111,6 @@ class serviceProducts {
                 brandId: brandFounded.dataValues.id
             }
 
-
-
             const newProduct = await Products.create(regProduct);
 
             const categoriesPromises = categories.map(async(cat) => {
@@ -123,20 +140,42 @@ class serviceProducts {
     }
 
     async update(id, product) {
-        return await Products.update(product, {
-            where: {
-                id: id
+        try {
+            let response = await Products.update(product, {
+                where: {
+                    id: id
+                }
+            });
+            if (response[0] === 0) {
+                throw { error: "Product not found" };
             }
-        });
+            if (response[0] === 1) {
+                return { msg: "Update Product sucessufully" }
+            }
+        } catch (error) {
+            return error;
+        };
     }
 
     async delete(id) {
-        return await Products.destroy({
-            where: {
-                id: id
+        try {
+            let response = await Products.destroy({
+                where: {
+                    id: id
+                }
+            });
+            console.log(response);
+            if (response === 0) {
+                throw { error: "Product not found" };
             }
-        });
-    }
+            if (response === 1) {
+                return { msg: "Delete Product sucessufully" }
+            }
+        } catch (error) {
+            return error;
+        };
+    };
 }
+
 
 module.exports = serviceProducts;

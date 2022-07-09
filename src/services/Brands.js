@@ -10,6 +10,8 @@ class serviceBrands {
     async getAll() {
         try {
             return await Brands.findAll({
+                order: ['name'],
+                attributes: ['id', 'name', 'image']
             });
         } catch (error) {
             return error;
@@ -17,16 +19,16 @@ class serviceBrands {
     }
 
     async getById(id) {
-        try{
+        try {
             let brand = await Brands.findByPk(id);
-            if(!brand) {
-                throw {error: "Brand not found"}
+            if (!brand) {
+                throw { error: "Brand not found" }
             }
             return brand
-        }catch(error){
+        } catch (error) {
             return error;
         }
-        
+
     }
 
 
@@ -34,14 +36,14 @@ class serviceBrands {
         const { name, image } = brand;
         try {
             if (!name || !image) {
-                throw {error: 'Name or Image is requerid field.'};
+                throw { error: 'Name or Image is requerid field.' };
             }
 
             const regBrand = { name, image };
 
-            const newBrand = await Brands.create(regBrand);
+            await Brands.create(regBrand);
 
-            return newBrand//{ msg: 'The brand was created successfully' };
+            return { msg: 'The brand was created successfully' };
 
         } catch (error) {
             return error;
@@ -49,77 +51,35 @@ class serviceBrands {
     }
 
     async update(id, name, image) {
-        try{
-            //console.log(id + " " + name + " " + image)
-            let brand = Brands.findByPk(id);
-            if(!brand){
-                throw {error: "Brand not found"}
+        try {
+            if (!name && !image) {
+                throw { error: 'Name and image are required' };
             }
-            if(!name && !image){
-                throw { error: 'Not found name and image' };
+            let brand = await Brands.findByPk(id);
+            if (!brand) {
+                throw { error: "Brand not found" };
             }
-            if(!name){
-                let response = await Brands.update(
-                    {
-                        image: image,
-                    },{
-                    where: {
-                        id: id,
-                    }  
-                }       
-                )   
-                if(response[0] === 1){
-                    return {msg:"Update Brand sucessufully"}
-                }     
-            }
-            if(!image){
-                let response = await Brands.update(
-                    {
-                        name: name,
-                    },{
-                    where: {
-                        id: id,
-                    }  
-                }       
-                )  
-                if(response[0] === 1){
-                    return {msg:"Update Brand sucessufully"}
-                }    
-            }
-            let response = await Brands.update(
-            {
-                name: name,
-                image: image
-            },{
-            where: {
-                id: id,
-            }  
-        }       
-            )
-            console.log(response)
-            if(response[0] === 0){
-                throw {error: "Brand not found"};
-            }
-            if(response[0] === 1){
-                return {msg:"Update Brand sucessufully"}
-            }
-            
-        } catch(error){
+            if (name) brand.name = name;
+            if (image) brand.image = image;
+            await brand.save();
+
+            return { msg: "Update Brand sucessufully" }
+        } catch (error) {
             return error
         }
     }
 
     async delete(id) {
-        //console.log(id  + " el id es este")
+
         let response = await Brands.destroy({
             where: {
                 id: id
             }
         });
-        if(response === 0){
-            throw {error: "Brand not found"};
+        if (response === 0) {
+            throw { error: "Brand not found" };
         }
-        return {msg:"Delete Brand sucessufully"}
+        return { msg: "Delete Brand sucessufully" }
     }
 }
 
