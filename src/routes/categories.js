@@ -7,17 +7,18 @@ const service = new serviceCategories();
 
 router.get('/', async(req, res, next) => {
     try {
-        const allCategories = await service.getAll();
-        res.status(200).json(allCategories);
+        const response = await service.getAll();
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
 });
 
 router.get('/:id', async(req, res, next) => {
+    let { id } = req.params;
     try {
-        const categoryById = await service.getById(req.params.id);
-        res.status(200).json(categoryById);
+        const response = await service.getById(id);
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
@@ -26,33 +27,29 @@ router.get('/:id', async(req, res, next) => {
 router.post('/', async(req, res, next) => {
 
     try {
-        const categoryCreated = await service.create(req.body);
-        res.status(201).json(categoryCreated);
+        const response = await service.create(req.body);
+        res.status(201).json(response);
     } catch (error) {
         next(error);
     }
 })
 
-
-
 router.put('/:id', async(req, res, next) => {
+    let { id } = req.params;
+    let body = req.body;
     try {
-        const category = await service.findByPk(req.params.id);
-        await category.update(req.body);
-        res.status(200).json(category);
+        let response = await service.update(id, body);
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
 })
 
 router.delete('/:id', async(req, res, next) => {
+    let { id } = req.params;
     try {
-        const category = await service.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
-        res.status(200).json(category);
+        let response = await service.delete(id);
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
