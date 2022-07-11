@@ -1,6 +1,7 @@
 'use strict';
 
 const { Categories } = require("../db.js");
+const returnErrorMessage = require("../utils/msgErrors.js");
 
 class serviceCategories {
     constructor() {
@@ -14,7 +15,7 @@ class serviceCategories {
                 attributes: ['id', 'name']
             });
         } catch (error) {
-            return error;
+            return returnErrorMessage(error);
         }
     }
 
@@ -22,11 +23,11 @@ class serviceCategories {
         try {
             let category = await Categories.findByPk(id);
             if (!category) {
-                throw { error: "Category not found" }
+                throw "Category not found";
             }
             return category
         } catch (error) {
-            return error;
+            return returnErrorMessage(error);
         }
     }
 
@@ -35,7 +36,7 @@ class serviceCategories {
         const { name } = category;
         try {
             if (!name) {
-                throw 'Name is requerid field.';
+                throw 'Name is requerid field';
             }
 
             const regCategory = { name };
@@ -45,7 +46,7 @@ class serviceCategories {
             return { msg: 'The category was created successfully' };
 
         } catch (error) {
-            return error;
+            return returnErrorMessage(error);
         }
     }
 
@@ -57,13 +58,13 @@ class serviceCategories {
                 }
             });
             if (response[0] === 0) {
-                throw { error: "Category not found" };
+                throw "Category not found";
             }
             if (response[0] === 1) {
                 return { msg: "Update Category sucessufully" }
             }
         } catch (error) {
-            return error;
+            return returnErrorMessage(error);
         }
 
     }
@@ -76,13 +77,13 @@ class serviceCategories {
                 }
             });
             if (response === 0) {
-                throw { error: "Category not found" };
+                throw "Category not found";
             }
             if (response === 1) {
                 return { msg: "Delete Category sucessufully" }
             }
         } catch (error) {
-            return error;
+            return returnErrorMessage(error);
         }
     }
 }
