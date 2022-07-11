@@ -35,7 +35,6 @@ router.post('/', async(req, res, next) => {
     }
 })
 
-
 router.put('/:id', async(req, res, next) => {
     try {
         const { name, image } = req.body;

@@ -7,7 +7,10 @@ module.exports = (sequelize) => {
         name: {
             type: DataTypes.STRING(30),
             allowNull: false,
-            unique: true
+            unique: {
+                args: true,
+                msg: 'Product name already exists'
+            }
         },
         description: { //prospecto comercial
             type: DataTypes.TEXT,
