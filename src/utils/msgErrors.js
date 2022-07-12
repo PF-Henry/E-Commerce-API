@@ -23,7 +23,7 @@ function returnErrorMessage(error) {
 
     const objErrors = {
         '22P02': { error: 'The ID must have a integer data type' },
-        '23505': { error: `The ${table} is already in the database` },
+        '23505': { error: `The ${propertyTable} is already in the database` },
     };
 
     return objErrors[propertyCode] || { error: error };

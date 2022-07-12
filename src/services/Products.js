@@ -48,6 +48,9 @@ class serviceProducts {
                         }
                     ]
                 });
+                if (response.length === 0) {
+                    throw "Product not found";
+                }
                 return response;
             }
 
