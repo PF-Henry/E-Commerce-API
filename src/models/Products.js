@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
     // defino el modelo
     sequelize.define('products', {
         name: {
-            type: DataTypes.STRING(30),
+            type: DataTypes.STRING(60),
             allowNull: false,
             unique: {
                 args: true,
