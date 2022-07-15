@@ -7,7 +7,7 @@ function returnErrorMessage(error) {
         return { error: error };
     }
 
-    let propertyCode = error.original.error;
+    let propertyCode = error.original.code;
     let propertyTable = error.original.table;
 
     if (propertyTable) {

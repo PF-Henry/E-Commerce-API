@@ -22,6 +22,8 @@ server.use((req, res, next) => {
     next();
 });
 
+require('./authentication/index.js');
+
 server.use('/api', routes);
 
 // Error catching endware.

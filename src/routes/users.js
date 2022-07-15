@@ -1,31 +1,53 @@
 const { Router } = require('express');
 const router = Router();
 
-const { Users } = require('../db.js');
+const serviceUser = require('../services/User');
+const service = new serviceUser();
+
+const passport = require('passport');
 
 
 router.get('/', async(req, res, next) => {
     try {
-        const users = await Users.findAll();
-        res.status(200).json(users);
+        const response = await service.getAll();
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
 });
 
-router.post('/', async(req, res, next) => {
+router.post('/register', async(req, res, next) => {
+    const body = req.body;
     try {
-        const users = await Users.create(req.body);
-        res.status(201).json(users);
+        const response = await service.create(body);
+        res.status(201).json(response);
     } catch (error) {
         next(error);
     }
 })
 
+router.post('/login',
+    passport.authenticate('local', { session: false }),
+
+    async(req, res, next) => {
+        console.log('login');
+        const { user } = req;
+
+        try {
+
+            res.status(201).json(user);
+        } catch (error) {
+            next(error);
+        }
+    })
+
+
 router.put('/:id', async(req, res, next) => {
+    const id = req.params.id;
+    const body = req.body;
     try {
-        const user = await Users.findByPk(req.params.id);
-        await user.update(req.body);
+        const response = await service.findByPk(id);
+        await service.update(body);
         res.status(200).json(user);
     } catch (error) {
         next(error);
