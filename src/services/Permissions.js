@@ -54,21 +54,29 @@ class servicePermissions {
     async create(permission) {
 
 
-        const { entity, get, post, put, role} = permission;
-        const adelete = permission.delete;
+        const { entity, _get, _post, _put, _delete, role} = permission;
+        
+        
 
         try {
-            if (!entity || !get || !post || !put || !adelete || !role) {
+            if (!entity || !_get || !_post || !_put || !_delete || !role) {
                 throw 'entity or get or post or put or delete are requerid field.';
             }
 
+            
             let roleFounded = await Roles.findOne({
                 where: { name: role }
             });
 
-            const regPermission = { entity, get, post, put, delete: adelete, roleId: roleFounded.dataValues.id };
+            const regPermission = { 
+                entity, 
+                get: _get, 
+                post: _post,
+                put : _put, 
+                delete: _delete, 
+                roleId: roleFounded.dataValues.id };
+               
 
-            console.log(regPermission)    
             await Permissions.create(regPermission);
 
             return { msg: 'The permission were created successfully' };
