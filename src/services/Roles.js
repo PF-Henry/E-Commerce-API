@@ -32,7 +32,6 @@ class serviceRoles {
 
     }
 
-
     async create(role) {
         const { name } = role;
         try {
