@@ -22,13 +22,6 @@ module.exports = (sequelize) => {
         },
         password:{
             type: DataTypes.STRING(64),
-            validate:{
-                isAlphanumeric: true,
-            },
-            allowNull: false
-        },
-        role:{
-            type: DataTypes.ENUM('Admin', 'User', 'Guest'),
             allowNull: false
         },
         address:{
