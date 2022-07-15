@@ -7,6 +7,7 @@ const routerBrands = require('./brands');
 const routerProducts = require('./products');
 const routerCategories = require('./categories');
 const routerRoles = require('./roles');
+const routerAuth = require('./auth');
 
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.use('/brands', routerBrands);
 router.use('/products', routerProducts);
 router.use('/categories', routerCategories);
 router.use('/roles', routerRoles);
+router.use('/auth', routerAuth);
 
 
 

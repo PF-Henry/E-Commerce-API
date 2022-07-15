@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
+const passport = require('passport');
 
 require('./db.js');
 
@@ -23,6 +24,7 @@ server.use((req, res, next) => {
 });
 
 require('./authentication/index.js');
+server.use(passport.initialize());
 
 server.use('/api', routes);
 
