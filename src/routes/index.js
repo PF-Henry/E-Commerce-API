@@ -8,6 +8,8 @@ const routerProducts = require('./products');
 const routerCategories = require('./categories');
 const routerRoles = require('./roles');
 const routerAuth = require('./auth');
+const routerPermissions = require('./permissions');
+const routerConfigDb = require('./configDb');
 
 
 const router = express.Router();
@@ -23,7 +25,8 @@ router.use('/products', routerProducts);
 router.use('/categories', routerCategories);
 router.use('/roles', routerRoles);
 router.use('/auth', routerAuth);
-
+router.use('/permissions', routerPermissions);
+router.use('/configDb', routerConfigDb);
 
 
 module.exports = router;

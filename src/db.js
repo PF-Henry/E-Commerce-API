@@ -80,11 +80,11 @@ Products.belongsToMany(Users, { through: 'Users_Products' });
 Brands.hasMany(Products); // brands has many products
 Products.belongsTo(Brands); // Product belongs to brand
 
-Users.hasOne(Roles);
-Roles.belongsTo(Users);
+Roles.hasMany(Users);
+Users.belongsTo(Roles);
 
-Roles.belongsToMany(Permissions, { through: 'Roles_Permissions' });
-Permissions.belongsToMany(Roles, { through: 'Roles_Permissions' });
+Roles.hasMany(Permissions);
+Permissions.belongsTo(Roles);
 
 module.exports = {
     ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
