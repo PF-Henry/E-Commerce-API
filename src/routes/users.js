@@ -30,7 +30,6 @@ router.post('/register', async(req, res, next) => {
 
 router.post('/login',
     passport.authenticate('local', { session: false }),
-
     async(req, res, next) => {
 
         const { user } = req;

@@ -34,8 +34,8 @@ class servicePermissions {
 
 
     async create(permission) {
-        const { entity, get, post, put} = permission;
-        const {adelete} = permission.delete;
+        const { entity, get, post, put } = permission;
+        const { adelete } = permission.delete;
         try {
             if (!entity || !get || !post || !put || !adelete) {
                 throw 'entity or get or post or put or delete are requerid field.';
@@ -53,9 +53,9 @@ class servicePermissions {
     }
 
     async update(id, permission) {
-        const { entity, get, post, put} = permission;
-        const {adelete} = permission.delete;
-        const {id} = id;
+        const { entity, get, post, put } = permission;
+        const { adelete } = permission.delete;
+        const { id } = id;
         try {
             if (!id && !entity && !get && !post && !put && !adelete) {
                 throw 'Id and entity and get and put and post and delete are required';
@@ -94,4 +94,4 @@ class servicePermissions {
     }
 }
 
-module.exports = serviceBrands;
+module.exports = servicePermissions;
