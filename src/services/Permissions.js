@@ -1,70 +1,77 @@
 'use strict';
 
-const { Brands } = require("../db.js");
+const { Permissions } = require("../db.js");
 const returnErrorMessage = require("../utils/msgErrors.js");
 
-class serviceBrands {
+class servicePermissions {
     constructor() {
-        this.brands = [];
+        this.permissions = [];
     }
 
     async getAll() {
         try {
             return await Permissions.findAll({
                 order: ['entity'],
-                // attributes: ['id', 'name', 'image']
+                attributes: ['id', 'entity', 'get', 'post', 'put', 'delete']
             });
         } catch (error) {
             return returnErrorMessage(error);
         }
     }
 
-    // async getById(id) {
-    //     try {
-    //         let brand = await Brands.findByPk(id);
-    //         if (!brand) {
-    //             throw "Brand not found";
-    //         }
-    //         return brand
-    //     } catch (error) {
-    //         return returnErrorMessage(error);
-    //     }
-
-    // }
-
-
-    async create(permissions) {
-        const { entity, get, post, put, delete} = permissions;
+    async getById(id) {
         try {
-            if (!entity || !get || !post || !put || !delete) {
+            let permission = await Permissions.findByPk(id);
+            if (!permission) {
+                throw "Permission not found";
+            }
+            return permission
+        } catch (error) {
+            return returnErrorMessage(error);
+        }
+
+    }
+
+
+    async create(permission) {
+        const { entity, get, post, put} = permission;
+        const {adelete} = permission.delete;
+        try {
+            if (!entity || !get || !post || !put || !adelete) {
                 throw 'entity or get or post or put or delete are requerid field.';
             }
 
-            const regPermissions = { entity, get, post, put, delete };
+            const regPermission = { entity, get, post, put, adelete };
 
-            await Permissions.create(regBrand);
+            await Permissions.create(regPermission);
 
-            return { msg: 'The permissions were created successfully' };
+            return { msg: 'The permission were created successfully' };
 
         } catch (error) {
             return returnErrorMessage(error);
         }
     }
 
-    async update(id, name, image) {
+    async update(id, permission) {
+        const { entity, get, post, put} = permission;
+        const {adelete} = permission.delete;
+        const {id} = id;
         try {
-            if (!name && !image) {
-                throw 'Name and image are required';
+            if (!id && !entity && !get && !post && !put && !adelete) {
+                throw 'Id and entity and get and put and post and delete are required';
             }
-            let brand = await Brands.findByPk(id);
-            if (!brand) {
-                throw "Brand not found";
+            let permission = await Permissions.findByPk(id);
+            if (!permission) {
+                throw "Permission not found";
             }
-            if (name) brand.name = name;
-            if (image) brand.image = image;
-            await brand.save();
+            if (entity) permission.entity = entity;
+            if (get) permission.get = get;
+            if (post) permission.post = post;
+            if (put) permission.put = put;
+            if (adelete) permission.adelete = adelete;
+            await permission.save();
 
-            return { msg: "Update Brand sucessufully" }
+            return { msg: "Update Permission sucessufully" }
         } catch (error) {
             return returnErrorMessage(error);
         }
@@ -72,15 +79,15 @@ class serviceBrands {
 
     async delete(id) {
         try {
-            let response = await Brands.destroy({
+            let response = await Permissions.destroy({
                 where: {
                     id: id
                 }
             });
             if (response === 0) {
-                throw "Brand not found";
+                throw "Permission not found";
             }
-            return { msg: "Delete Brand sucessufully" }
+            return { msg: "Delete Permission sucessufully" }
         } catch (error) {
             return returnErrorMessage(error);
         }
