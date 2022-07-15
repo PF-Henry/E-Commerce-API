@@ -1,6 +1,6 @@
 'use strict';
 
-const { Permissions } = require("../db.js");
+const { Permissions, Roles, Users } = require("../db.js");
 const returnErrorMessage = require("../utils/msgErrors.js");
 
 class servicePermissions {
@@ -12,7 +12,25 @@ class servicePermissions {
         try {
             return await Permissions.findAll({
                 order: ['entity'],
-                attributes: ['id', 'entity', 'get', 'post', 'put', 'delete']
+                attributes: ['id', 'entity', 'get', 'post', 'put', 'delete'],
+                include:[{model: Roles}
+                   // ,{model: Users}
+                ],
+                
+            });
+        } catch (error) {
+            return returnErrorMessage(error);
+        }
+    }
+
+    async getByRole(role) {
+        try {
+            return await Permissions.findAll({
+                order: ['entity'],
+                attributes: ['id', 'entity', 'get', 'post', 'put', 'delete'],
+                where:{
+                    role
+                }
             });
         } catch (error) {
             return returnErrorMessage(error);
@@ -34,15 +52,21 @@ class servicePermissions {
 
 
     async create(permission) {
-        const { entity, get, post, put} = permission;
-        const {adelete} = permission.delete;
+        const { entity, get, post, put, role} = permission;
+        const adelete = permission.delete;
+        console.log(permission)
         try {
-            if (!entity || !get || !post || !put || !adelete) {
+            if (!entity || !get || !post || !put || !adelete || !role) {
                 throw 'entity or get or post or put or delete are requerid field.';
             }
 
-            const regPermission = { entity, get, post, put, adelete };
+            let roleFounded = await Roles.findOne({
+                where: { name: role }
+            });
 
+            const regPermission = { entity, get, post, put, delete: adelete, roleId: roleFounded.dataValues.id };
+
+            console.log(regPermission)    
             await Permissions.create(regPermission);
 
             return { msg: 'The permission were created successfully' };
@@ -55,7 +79,6 @@ class servicePermissions {
     async update(id, permission) {
         const { entity, get, post, put} = permission;
         const {adelete} = permission.delete;
-        const {id} = id;
         try {
             if (!id && !entity && !get && !post && !put && !adelete) {
                 throw 'Id and entity and get and put and post and delete are required';
@@ -94,4 +117,4 @@ class servicePermissions {
     }
 }
 
-module.exports = serviceBrands;
+module.exports = servicePermissions;
