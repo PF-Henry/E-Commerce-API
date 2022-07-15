@@ -8,46 +8,46 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(30),
             allowNull: false,
         },
-        last_name:{
+        last_name: {
             type: DataTypes.STRING(30),
             allowNull: false
         },
-        email:{
+        email: {
             type: DataTypes.STRING(80),
-            validate:{
+            validate: {
                 isEmail: true,
             },
             allowNull: false,
             unique: true
         },
-        password:{
+        password: {
             type: DataTypes.STRING(64),
             allowNull: false
         },
-        address:{
+        address: {
             type: DataTypes.STRING(40),
             allowNull: true
         },
-        cellphone:{
+        cellphone: {
             type: DataTypes.INTEGER,
-            validate:{
-                isNumeric: true, 
+            validate: {
+                isNumeric: true,
             },
             allowNull: true
         },
-        location:{//municipio y/o localidad
+        location: { //municipio y/o localidad
             type: DataTypes.STRING(30),
             allowNull: true
         },
-        department:{//estado provincial
+        department: { //estado provincial
             type: DataTypes.STRING(30),
             allowNull: true
         },
-        zip_code:{//codigo postal
+        zip_code: { //codigo postal
             type: DataTypes.STRING(20),
             allowNull: true
         },
-        reset_password:{
+        reset_password: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         }

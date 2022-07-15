@@ -8,6 +8,7 @@ const routerProducts = require('./products');
 const routerCategories = require('./categories');
 const routerRoles = require('./roles');
 
+
 const router = express.Router();
 
 // Configurar los routers
@@ -20,6 +21,7 @@ router.use('/brands', routerBrands);
 router.use('/products', routerProducts);
 router.use('/categories', routerCategories);
 router.use('/roles', routerRoles);
+
 
 
 module.exports = router;
