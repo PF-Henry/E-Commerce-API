@@ -5,8 +5,8 @@ const serviceUser = require('../services/User');
 const service = new serviceUser();
 
 const passport = require('passport');
-// const jwt = require('../utils/jwt');
-const jwt = require('jsonwebtoken');
+const { signToken, verifyToken } = require('../utils/jwt');
+// const jwt = require('jsonwebtoken');
 
 
 router.get('/', async(req, res, next) => {
@@ -34,17 +34,21 @@ router.post('/login',
     async(req, res, next) => {
 
         const { user } = req;
-        const secret = 'fiufiu';
-        // const expiresIn = '10s';
-        // const algorithm = 'HS256';
+        const payload = {
+            sub: user.id,
+            role: user.role,
+            permissions: user.permissions
+        };
+        // const secret = 'secretKey';
 
         try {
-            // const token = jwt.sign({ user }, secret, { expiresIn, algorithm }, (err, token) => {
-            jwt.sign({ user }, secret, (err, token) => {
-                res.json({ token });
+            const token = signToken(payload);
+            // const payloadResponse = verifyToken(token);
+            res.json({
+                user,
+                token
             });
-
-            // res.json(user);
+            // res.json(payloadResponse);
         } catch (error) {
             next(error);
         }
