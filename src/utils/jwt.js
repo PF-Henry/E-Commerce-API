@@ -1,17 +1,20 @@
 const jwt = require('jsonwebtoken');
 
-const secret = 'fiu-fiu';
-const expiresIn = '10s';
+const secret = 'secretKey';
+const expiresIn = '10m';
 const algorithm = 'HS256';
 
-// const payload = {
-//     sub: '1234567890',
-//     name: 'John Doe',
-//     admin: true
-// };
+//* Returns a token with the payload and the secret
+function signToken(payload, secret = 'secretKey') {
+    return jwt.sign({ payload }, secret, { expiresIn, algorithm });
+}
 
-jwt.sign(user, secret, { expiresIn, algorithm }, (err, token) => {
-    return token;
-});
+//* Returns the payload of the token
+function verifyToken(token, secret = 'secretKey') {
+    return jwt.verify(token, secret, { algorithm });
+}
 
-module.exports = jwt;
+module.exports = {
+    signToken,
+    verifyToken
+};
