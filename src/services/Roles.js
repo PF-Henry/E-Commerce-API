@@ -1,6 +1,6 @@
 'use strict';
 
-const { Roles } = require("../db.js");
+const { Roles, Permissions } = require("../db.js");
 const returnErrorMessage = require("../utils/msgErrors.js");
 
 class serviceRoles {
@@ -12,7 +12,8 @@ class serviceRoles {
         try {
             return await Roles.findAll({
                 order: ['name'],
-                attributes: ['id', 'name']
+                attributes: ['id', 'name'],
+                include: [{ model: Permissions }]
             });
         } catch (error) {
             return returnErrorMessage(error);

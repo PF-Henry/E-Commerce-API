@@ -8,18 +8,18 @@ const returnErrorMessage = require("../utils/msgErrors.js");
 
 router.get('/', async(req, res, next) => {
     try {
-            const response = await service.getAll();
-            return res.status(200).json(response);    
+        const response = await service.getAll();
+        return res.status(200).json(response);
     } catch (error) {
         return returnErrorMessage(error);
     }
 });
 
 router.get('/:role', async(req, res, next) => {
-    const {role} = req.params;
+    const { role } = req.params;
     try {
-            const response = await service.getByRol(role);
-            return res.status(200).json(response);    
+        const response = await service.getByRol(role);
+        return res.status(200).json(response);
     } catch (error) {
         return returnErrorMessage(error);
     }
@@ -38,9 +38,9 @@ router.get('/:id', async(req, res, next) => {
 router.post('/', async(req, res, next) => {
     let body = req.body;
     try {
-            const response = await service.create(body);
-            return res.status(201).json(response);
-              
+        const response = await service.create(body);
+        return res.status(201).json(response);
+
     } catch (error) {
         return returnErrorMessage(error);
     }
@@ -50,8 +50,8 @@ router.put('/:id', async(req, res, next) => {
     let { id } = req.params;
     let body = req.body;
     try {
-            const response = await service.update(id, body);
-            res.status(200).json(response);        
+        const response = await service.update(id, body);
+        res.status(200).json(response);
     } catch (error) {
         return returnErrorMessage(error);
     }
@@ -60,8 +60,8 @@ router.put('/:id', async(req, res, next) => {
 router.delete('/:id', async(req, res, next) => {
     let { id } = req.params;
     try {
-            const response = await service.delete(id);
-            res.status(200).json(response);        
+        const response = await service.delete(id);
+        res.status(200).json(response);
     } catch (error) {
         return returnErrorMessage(error);
     }
