@@ -49,12 +49,19 @@ class serviceUsers {
     }
 
     async create(body) {
-        const { password } = body;
+        const { password, role="User" } = body;
         try {
             const hashedPassword = await hashPassword(password);
+
+            // roles
+            const roleFound = await Roles.findOne({
+                where: { name: role }
+            });
+
             const user = await Users.create({
                 ...body,
-                password: hashedPassword
+                password: hashedPassword,
+                roleId: roleFound.id
             });
 
             // return { ...user.dataValues, password: null };
