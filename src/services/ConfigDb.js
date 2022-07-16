@@ -16,7 +16,7 @@ class serviceConfigDb {
         try {
             
             const table = "users";
-            const column = "password";
+            const column = "role";
             const typeColumn = {
                             type: DataTypes.STRING(64),
                             allowNull: false }
