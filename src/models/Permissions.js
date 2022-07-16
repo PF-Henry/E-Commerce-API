@@ -9,19 +9,19 @@ module.exports = (sequelize) => {
             unique: true,
             allowNull: false,
         },
-        get:{
+        get: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
-        post:{
+        post: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
-        delete:{
+        delete: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
-        put:{
+        put: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
