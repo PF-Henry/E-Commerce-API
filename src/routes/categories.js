@@ -19,8 +19,8 @@ router.get('/', async(req, res, next) => {
 });
 
 router.get('/:id',
-    passport.authenticate('jwt', { session: false }),
-    checkPermissions,
+    // passport.authenticate('jwt', { session: false }),
+    // checkPermissions,
     async(req, res, next) => {
         let { id } = req.params;
         try {
@@ -32,8 +32,8 @@ router.get('/:id',
     });
 
 router.post('/',
-    passport.authenticate('jwt', { session: false }),
-    checkPermissions,
+    // passport.authenticate('jwt', { session: false }),
+    // checkPermissions,
     async(req, res, next) => {
 
         try {
