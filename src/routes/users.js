@@ -33,21 +33,22 @@ router.post('/login',
     async(req, res, next) => {
 
         const { user } = req;
-        const payload = {
-            sub: user.id,
-            role: user.role,
-            permissions: user.permissions
-        };
+        console.log('user', user);
+        // const payload = {
+        //     ...user
+        // };
+        const payload = user;
+        console.log(payload);
         // const secret = 'secretKey';
 
         try {
             const token = signToken(payload);
-            // const payloadResponse = verifyToken(token);
-            res.json({
-                user,
-                token
-            });
-            // res.json(payloadResponse);
+            const payloadResponse = verifyToken(token);
+            // res.json({
+            //     user,
+            //     token
+            // });
+            res.json(payloadResponse);
         } catch (error) {
             next(error);
         }

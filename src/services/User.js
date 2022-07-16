@@ -13,7 +13,7 @@ class serviceUsers {
     async getAll() {
         try {
             const users = await Users.findAll({
-                attributes: ['id', 'first_name', 'last_name', 'email'],
+                // attributes: ['id', 'first_name', 'last_name', 'email'],
                 include: [{
                     model: Roles,
                     attributes: ['id', 'name'],
@@ -28,7 +28,13 @@ class serviceUsers {
 
     async getById(id) {
         try {
-            const user = await Users.findByPk(id);
+            const user = await Users.findByPk(id, {
+                include: [{
+                    model: Roles,
+                    attributes: ['id', 'name'],
+                    include: Permissions
+                }]
+            });
             return user;
         } catch (error) {
             throw error;
@@ -40,7 +46,13 @@ class serviceUsers {
             const user = await Users.findOne({
                 where: {
                     email: email
-                }
+                },
+                // attributes: ['id', 'first_name', 'last_name', 'email'],
+                include: [{
+                    model: Roles,
+                    attributes: ['id', 'name'],
+                    include: Permissions
+                }]
             });
             return user;
         } catch (error) {
