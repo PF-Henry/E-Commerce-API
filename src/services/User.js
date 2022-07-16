@@ -49,7 +49,8 @@ class serviceUsers {
     }
 
     async create(body) {
-        const { password, role="User" } = body;
+        const role = 'User';
+        const { password } = body;
         try {
             const hashedPassword = await hashPassword(password);
 
@@ -58,11 +59,16 @@ class serviceUsers {
                 where: { name: role }
             });
 
+            if (!roleFound) {
+                throw 'Role not found';
+            }
+
             const user = await Users.create({
                 ...body,
                 password: hashedPassword,
                 roleId: roleFound.id
             });
+            await user.addRole(roleFound);
 
             // return { ...user.dataValues, password: null };
             return { msg: 'User created successfully' };
@@ -71,26 +77,40 @@ class serviceUsers {
         }
     }
 
-    async update(id, body) {
+    async update(id, user) {
         try {
-            const user = await Users.findByPk(id);
-            await user.update(body);
-            return user;
+            const user = await Users.update(user, {
+                where: {
+                    id: id
+                }
+            });
+            if (user === 0) {
+                throw 'User not found';
+            }
+            if (user === 1) {
+                return { msg: 'User updated successfully' };
+            }
+
         } catch (error) {
-            throw error;
+            return returnErrorMessage(error);
         }
     }
 
     async delete(id) {
         try {
-            const user = await Users.destroy({
+            const response = await Users.destroy({
                 where: {
-                    id
+                    id: id
                 }
             });
-            return user;
+            if (response === 0) {
+                throw 'User not found';
+            }
+            if (response === 1) {
+                return { msg: 'User deleted successfully' };
+            }
         } catch (error) {
-            throw error;
+            return returnErrorMessage(error);
         }
     }
 }

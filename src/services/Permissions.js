@@ -13,10 +13,10 @@ class servicePermissions {
             return await Permissions.findAll({
                 order: ['entity'],
                 attributes: ['id', 'entity', 'get', 'post', 'put', 'delete'],
-                include:[{model: Roles}
-                   // ,{model: Users}
+                include: [{ model: Roles }
+                    // ,{model: Users}
                 ],
-                
+
             });
         } catch (error) {
             return returnErrorMessage(error);
@@ -28,7 +28,7 @@ class servicePermissions {
             return await Permissions.findAll({
                 order: ['entity'],
                 attributes: ['id', 'entity', 'get', 'post', 'put', 'delete'],
-                where:{
+                where: {
                     role
                 }
             });
@@ -54,28 +54,29 @@ class servicePermissions {
     async create(permission) {
 
 
-        const { entity, _get, _post, _put, _delete, role} = permission;
-        
-        
+        const { entity, _get, _post, _put, _delete, role } = permission;
+
+
 
         try {
             if (!entity || !_get || !_post || !_put || !_delete || !role) {
                 throw 'entity or get or post or put or delete are requerid field.';
             }
 
-            
+
             let roleFounded = await Roles.findOne({
                 where: { name: role }
             });
 
-            const regPermission = { 
-                entity, 
-                get: _get, 
+            const regPermission = {
+                entity,
+                get: _get,
                 post: _post,
-                put : _put, 
-                delete: _delete, 
-                roleId: roleFounded.dataValues.id };
-               
+                put: _put,
+                delete: _delete,
+                roleId: roleFounded.dataValues.id
+            };
+
 
             await Permissions.create(regPermission);
 
@@ -88,8 +89,8 @@ class servicePermissions {
 
     async update(id, permission) {
 
-        const { entity, get, post, put} = permission;
-        const {adelete} = permission.delete;
+        const { entity, get, post, put } = permission;
+        const { adelete } = permission.delete;
 
         try {
             if (!id && !entity && !get && !post && !put && !adelete) {

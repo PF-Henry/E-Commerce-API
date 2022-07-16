@@ -67,13 +67,10 @@ router.put('/:id', async(req, res, next) => {
 })
 
 router.delete('/:id', async(req, res, next) => {
+    const { id } = req.params;
     try {
-        const user = await Users.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
-        res.status(200).json(user);
+        const response = await service.delete(id);
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
