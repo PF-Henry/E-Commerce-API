@@ -1,22 +1,13 @@
 const router = require("express").Router();
 const passport = require("passport");
 
-const CLIENT_URL = "http://localhost:3000/";
+const CLIENT_URL = "http://localhost:3000";
 
-router.get("/login/success", (req, res) => {
-    if (req.user) {
-        res.status(200).json({
-            success: true,
-            message: "successfull",
-            user: req.user,
-            permissions: "aqui van a ir los permisos",
-            otroMensage: "usuario logueado",
-            cookies: req.cookies
-        });
-    }
-});
+const { signToken, verifyToken } = require("../utils/jwt");
+
 
 router.get("/login/failed", (req, res) => {
+    console.log('failed')
     res.status(401).json({
         success: false,
         message: "failure",
@@ -24,7 +15,13 @@ router.get("/login/failed", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-    req.logout();
+    // req.logout(function(err) {
+    //     if (err) { return next(err); }
+    //     res.redirect(CLIENT_URL);
+    // });
+    console.log('1', req.user)
+    req.user = null;
+    console.log('2', req.user)
     res.redirect(CLIENT_URL);
 });
 
@@ -40,30 +37,39 @@ router.get("/google", passport.authenticate("google", {
 
 router.get(
     "/google/callback",
+
     passport.authenticate("google", {
-        successRedirect: CLIENT_URL,
-        failureRedirect: "/login/failed",
-    })
+        session: false,
+        // successRedirect: 'http://localhost:3000',
+        // failureRedirect: 'http://localhost:3001/api/auth/login/failed'
+    }),
+    (req, res, next) => {
+        const token = signToken(req.user);
+        console.log('user', req.user)
+            // next(req.user)
+        res.cookie("token", token, { httpOnly: true, secure: true });
+        res.redirect('http://localhost:3001/api/auth/login/success');
+        // res.redirect(CLIENT_URL);
+        // next(res);
+    }
 );
 
-router.get("/github", passport.authenticate("github", { scope: ["profile"] }));
+router.get("/login/success",
 
-router.get(
-    "/github/callback",
-    passport.authenticate("github", {
-        successRedirect: CLIENT_URL,
-        failureRedirect: "/login/failed",
-    })
-);
+    (req, res) => {
+        const token = req.cookies.token;
+        // const user = req.user;
+        res.json({ cookie: token })
+            // res.json({ user: user })
+            // res.redirect(CLIENT_URL);
+            // const { user } = req;
+            // console.log('user', user)
+            // const token = signToken(user);
+            // const payload = verifyToken(token);
+            // // res.setHeader("Set-Cookie", `token=${token}; HttpOnly; Path=/`);
+            // res.json({ token: payload });
+            // res.json('hola');
+    }
+)
 
-router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));
-
-router.get(
-    "/facebook/callback",
-    passport.authenticate("facebook", {
-        successRedirect: CLIENT_URL,
-        failureRedirect: "/login/failed",
-    })
-);
-
-module.exports = router
+module.exports = router;
