@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const secret = 'secretKey';
-const expiresIn = '20s';
+const expiresIn = '6h';
 const algorithm = 'HS256';
 
 //* Returns a token with the payload and the secret
