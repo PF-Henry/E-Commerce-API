@@ -11,10 +11,14 @@ module.exports = (sequelize) => {
         rating:{
             type: DataTypes.INTEGER,
             validate:{
-                min: 1,
+                min: 0,
                 max: 5
             },
-            allowNull: false
+            defaultValue: 0
+        },
+        verified:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     });
 };
