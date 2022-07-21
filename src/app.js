@@ -24,7 +24,7 @@ server.use((req, res, next) => {
 });
 
 require('./authentication/index.js');
-server.use(passport.initialize());
+// server.use(passport.initialize());
 
 server.use('/api', routes);
 
