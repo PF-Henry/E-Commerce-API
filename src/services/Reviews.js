@@ -38,7 +38,7 @@ class serviceReviews {
             if (!rating || !content || !idProduct || !idOrder) {
                 throw 'Rating or Content or idProduct or idOrder is requerid field.';
             }
-
+            const productId 
             const regReview = { rating, content, idProduct, idOrder };
 
             await Reviews.create(regReview);
