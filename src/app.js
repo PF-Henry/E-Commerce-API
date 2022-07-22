@@ -24,8 +24,8 @@ server.use((req, res, next) => {
 });
 
 require('./authentication/index.js');
-app.set("trust proxy", 1);
-app.use(
+server.set("trust proxy", 1);
+server.use(
     session({
         secret: 'secretKey',
         resave: true,
