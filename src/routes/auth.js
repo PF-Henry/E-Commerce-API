@@ -32,7 +32,7 @@ router.get("/google/callback",
     }),
     (req, res, next) => {
         let message = 'Registro exitoso - Ahora inicia session';
-        res.cookie('error', message);
+        res.append('Origin-Cookie', `error=${message}`);
         res.redirect(`${CLIENT_URL}/login`);
     }
 );
@@ -53,20 +53,20 @@ router.get("/google/signin",
     }),
     (req, res, next) => {
         const token = signToken(req.user);
-        res.cookie("token", token);
+        res.append('Origin-Cookie', `error=${message}`);
         res.redirect(CLIENT_URL);
     }
 );
 
 router.get("/register/failed", (req, res) => {
     let message = 'El usuario ya existe - Ahora inicia session';
-    res.cookie('error', message);
+    res.append('Origin-Cookie', `error=${message}`);
     res.redirect(`${CLIENT_URL}/login`);
 });
 
 router.get("/login/failed", (req, res) => {
     let message = 'Acceso denegado - Debes registrarte';
-    res.cookie('error', message);
+    res.append('Origin-Cookie', `error=${message}`);
     res.redirect(`${CLIENT_URL}/register`);
 });
 
