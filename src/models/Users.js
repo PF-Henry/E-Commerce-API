@@ -50,6 +50,9 @@ module.exports = (sequelize) => {
         reset_password: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
+        },
+        state:{
+            type: DataTypes.BOOLEAN,  // true = activo, false = inactivo
         }
     });
 };
