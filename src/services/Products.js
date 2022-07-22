@@ -100,7 +100,25 @@ class serviceProducts {
     async getById(id) {
         try {
             let product = await Products.findByPk(id, {
-                include: [Categories, Brands, Images, Reviews] //Falta incluir Reviews
+                // include: [Categories, Brands, Images, Reviews] //Falta incluir Reviews
+                // include: [{ Categories, Brands, Images }]
+                include: [{
+                        model: Categories,
+                        attributes: ['id', 'name']
+                    },
+                    {
+                        model: Brands,
+                        attributes: ['id', 'name']
+                    },
+                    {
+                        model: Images,
+                        attributes: ['id', 'url_image']
+                    },
+                    // {
+                    //     model: Reviews,
+                    //     attributes: ['id', 'description', 'stars']
+                    // }
+                ]
             });
             if (!product) {
                 throw "Product not found";
