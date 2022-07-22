@@ -11,6 +11,7 @@ const { dirname } = require('path');
 
 
 const returnErrorMessage = require("../utils/msgErrors.js");
+const { ARRAY } = require('sequelize');
 
 
 class serviceProducts {
@@ -122,7 +123,6 @@ class serviceProducts {
     }
 
     async create(product, req) {
-
         const { name, description, technical_especification, price, stock, categories, images, brand } = product;
         try {
             if (!name || !description || !technical_especification || !price || !stock || !categories) {
@@ -137,6 +137,7 @@ class serviceProducts {
                 throw 'Stock must be greater than or equal to 0';
             }
 
+        
             const arrayCategories = JSON.parse(categories);
             if (!arrayCategories || !Array.isArray(arrayCategories)) { // check that categories is not null and check is an array
                 throw 'The product must have at least one Category ';
@@ -155,37 +156,46 @@ class serviceProducts {
                 technical_especification,
                 price,
                 stock,
-                brandId: brandFounded.dataValues.id
+                brandId: brandFounded.dataValues.id,
+                state: false,
             }
 
+                
             const newProduct = await Products.create(regProduct);
+                    
+        
 
-            
             const categoriesPromises = arrayCategories.map(async(cat) => {
                 let category = await Categories.findAll({
                     where: { name: cat.name }
                 });
                 return newProduct.setCategories(category); //la asociacion la realiza como objeto
             });
-
+        
             await Promise.all(categoriesPromises);
-           
-            // ------------------------------------------- upload Images --------------------------------------------------
-            const fileName = product.fileName;
+
             
-            let arrBuffer = fileName.map((b64string) =>{
-                const b64 = b64string.split(';base64,').pop();    
-                return Buffer.from(b64, 'base64');
-            } );
+                   
+            // ------------------------------------------- upload Images --------------------------------------------------
+            const fileName = product.fileName;           
+            let arrBuffer =[];
+            if (Array.isArray(fileName)) {
+                arrBuffer = fileName.map((b64string) =>{
+                    const b64 = b64string.split(';base64,').pop();    
+                    return Buffer.from(b64, 'base64');
+                } );
+            } else {
+                const b642= fileName.split(';base64,').pop();
+                arrBuffer.push(Buffer.from(b642, 'base64'));
+            }
 
-
+    
             // obtener el nombre del servidor 
             //const serverName = process.env.SERVER_NAME;
 
 
             const protocol = req.protocol;
             const serverName = protocol + "://" + req.get("host") + "/api/";
-
 
             let arrayImages = []; // guarada los nombres de las imagenes para las url
             arrBuffer.forEach(async (buffer64, index) => {
