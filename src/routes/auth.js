@@ -6,6 +6,7 @@ const CLIENT_URL = "https://hexatech-store.netlify.app";
 const API_URL = "https://hexatech-api.herokuapp.com";
 
 // const CLIENT_URL = "http://localhost:3000";
+// const API_URL = "http://localhost:3001";
 const { signToken, verifyToken } = require("../utils/jwt");
 
 
