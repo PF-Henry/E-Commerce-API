@@ -33,6 +33,9 @@ module.exports = (sequelize) => {
                 min: 0
             },
             defaultValue: 0,
+        },
+        state:{
+            type: DataTypes.BOOLEAN,  // true = activo, false = inactivo
         }
-    });
+        });
 };
