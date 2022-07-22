@@ -8,6 +8,7 @@ const passport = require('passport');
 require('./db.js');
 
 const server = express();
+const session = require('express-session');
 
 server.name = 'API';
 
