@@ -17,7 +17,7 @@ server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
 server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', process.env.NODE_ENV === 'production' ? process.env.URL_CLIENT : '*'); // Cambiar a URL de front-end en producción
+    res.header('Access-Control-Allow-Origin', '*'); // Cambiar a URL de front-end en producción
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
