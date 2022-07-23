@@ -110,7 +110,7 @@ class serviceProducts {
     async getById(id) {
         try {
             let product = await Products.findByPk(id, {
-                include: [Categories, Brands, Images, Reviews] //Falta incluir Reviews
+                include: [Categories, Brands, Images] //Falta incluir Reviews
             });
             if (!product) {
                 throw "Product not found";
