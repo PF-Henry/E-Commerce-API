@@ -43,7 +43,7 @@ class serviceProducts {
                             }
                         ]
                     },
-                    attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId'],
+                    attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId', 'state'],
                     include: [{
                             model: Categories,
                             attributes: ['id', 'name']
@@ -71,7 +71,7 @@ class serviceProducts {
                     },
                     include: [{
                         model: Products,
-                        attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId'],
+                        attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId', 'state'],
                         include: [{
                                 model: Brands,
                                 attributes: ['id', 'name']
