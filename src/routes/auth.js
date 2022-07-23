@@ -2,11 +2,11 @@ const router = require("express").Router();
 const { request } = require("express");
 const passport = require("passport");
 
-const CLIENT_URL = "https://hexatech-store.netlify.app";
-const API_URL = "https://hexatech-api.herokuapp.com";
+// const CLIENT_URL = "https://hexatech-store.netlify.app";
+// const API_URL = "https://hexatech-api.herokuapp.com";
 
-// const CLIENT_URL = "http://localhost:3000";
-// const API_URL = "http://localhost:3001";
+const CLIENT_URL = "http://localhost:3000";
+const API_URL = "http://localhost:3001";
 const { signToken, verifyToken } = require("../utils/jwt");
 
 
