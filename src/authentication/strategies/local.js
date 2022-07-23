@@ -9,6 +9,7 @@ const localStrategy = new Strategy({
 }, async(email, password, done) => {
     try {
         const user = await service.getByEmail(email);
+        console.log('user', user);
         if (!user) {
             done({ msg: 'Invalid email' }, false);
         }

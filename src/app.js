@@ -32,8 +32,10 @@ server.use(
         resave: true,
         saveUninitialized: false,
         cookie: {
-            sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
-            secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
+            // sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
+            sameSite: 'none',
+            // secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
+            secure: true,
         }
     })
 );
