@@ -8,6 +8,7 @@ const passport = require('passport');
 require('./db.js');
 
 const server = express();
+const session = require('express-session');
 
 server.name = 'API';
 
@@ -16,7 +17,7 @@ server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
 server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*'); // Cambiar a URL de front-end en producción
+    res.header('Access-Control-Allow-Origin', process.env.NODE_ENV === 'production' ? process.env.URL_CLIENT : '*'); // Cambiar a URL de front-end en producción
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -24,6 +25,18 @@ server.use((req, res, next) => {
 });
 
 require('./authentication/index.js');
+server.set("trust proxy", 1);
+server.use(
+    session({
+        secret: 'secretKey',
+        resave: true,
+        saveUninitialized: false,
+        cookie: {
+            sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
+            secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
+        }
+    })
+);
 // server.use(passport.initialize());
 
 server.use('/api', routes);

@@ -32,6 +32,8 @@ router.get("/google/callback",
     }),
     (req, res, next) => {
         let message = 'Registro exitoso - Ahora inicia session';
+        // res.append('Origin-Cookie', `error=${message}`);
+        // res.append('Set-Cookie', `error=${message}`);
         res.cookie('error', message);
         res.redirect(`${CLIENT_URL}/login`);
     }
@@ -52,20 +54,29 @@ router.get("/google/signin",
         ]
     }),
     (req, res, next) => {
-        const token = signToken(req.user);
-        res.cookie("token", token);
-        res.redirect(CLIENT_URL);
+        if (req.user) {
+            console.log('user', req.user);
+            const token = signToken(req.user);
+            // res.append('Origin-Cookie', `token=${token}`);
+            // res.append('Set-Cookie', `token=${token}`);
+            res.cookie('token', token);
+            res.redirect(CLIENT_URL);
+        }
     }
 );
 
 router.get("/register/failed", (req, res) => {
     let message = 'El usuario ya existe - Ahora inicia session';
+    // res.append('Origin-Cookie', `error=${message}`);
+    // res.append('Set-Cookie', `error=${message}`);
     res.cookie('error', message);
     res.redirect(`${CLIENT_URL}/login`);
 });
 
 router.get("/login/failed", (req, res) => {
     let message = 'Acceso denegado - Debes registrarte';
+    // res.append('Origin-Cookie', `error=${message}`);
+    // res.append('Set-Cookie', `error=${message}`);
     res.cookie('error', message);
     res.redirect(`${CLIENT_URL}/register`);
 });
