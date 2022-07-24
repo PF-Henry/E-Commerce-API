@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { request } = require("express");
+const { session } = require("passport");
 const passport = require("passport");
 
 const CLIENT_URL = "https://hexatech-store.netlify.app";
@@ -34,7 +35,7 @@ router.get("/google/callback",
         let message = 'Registro exitoso - Ahora inicia session';
         // res.append('Origin-Cookie', `error=${message}`);
         // res.append('Set-Cookie', `error=${message}`);
-        res.cookie('error', message);
+        res.cookie('error', message, { sameSite: 'none', secure: true });
         res.redirect(`${CLIENT_URL}/login`);
     }
 );
@@ -58,18 +59,29 @@ router.get("/google/signin",
             console.log('user', req.user);
             const token = signToken(req.user);
             // res.append('Origin-Cookie', `token=${token}`);
+
             // res.append('Set-Cookie', `token=${token}`);
-            res.cookie('token', token);
+            res.cookie('token', token, { sameSite: 'none', secure: true, httpOnly: false });
             res.redirect(CLIENT_URL);
+            // res.redirect(`${API_URL}/api/auth/login/success`);
+            // next(req.user);
         }
     }
 );
+
+// router.get("/login/success", (req, res) => {
+//     let token = req.cookies;
+
+//     console.log('cookie', token);
+//     console.log('user', req.user);
+//     res.json({ token: token });
+// });
 
 router.get("/register/failed", (req, res) => {
     let message = 'El usuario ya existe - Ahora inicia session';
     // res.append('Origin-Cookie', `error=${message}`);
     // res.append('Set-Cookie', `error=${message}`);
-    res.cookie('error', message);
+    res.cookie('error', message, { sameSite: 'none', secure: true, httpOnly: false });
     res.redirect(`${CLIENT_URL}/login`);
 });
 
@@ -77,9 +89,12 @@ router.get("/login/failed", (req, res) => {
     let message = 'Acceso denegado - Debes registrarte';
     // res.append('Origin-Cookie', `error=${message}`);
     // res.append('Set-Cookie', `error=${message}`);
-    res.cookie('error', message);
+    res.cookie('error', message, { sameSite: 'none', secure: true, httpOnly: false });
     res.redirect(`${CLIENT_URL}/register`);
 });
+
+
+
 
 
 module.exports = router;

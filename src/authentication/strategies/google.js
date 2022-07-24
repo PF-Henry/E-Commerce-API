@@ -6,15 +6,6 @@ const service = new serviceUser();
 const GOOGLE_CLIENT_ID = "559232330287-ctdb2lf5f65n3mmiu1pas5gie6oa3ljo.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = "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";
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    user = service.getById(user.id);
-    done(null, user);
-});
-
 //* Google Strategy for Signing Up
 const googleStrategySignUp = new Strategy({
         clientID: GOOGLE_CLIENT_ID,
@@ -55,13 +46,21 @@ const googleStrategySignIn = new Strategy({
     },
     async function(req, accessToken, refreshToken, profile, done) {
         const userByEmail = await service.getByEmail(profile.emails[0].value);
-        console.log(userByEmail);
         if (!userByEmail) {
             done(null, false);
         } else {
             done(null, userByEmail);
         }
     });
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+    user = service.getById(user.id);
+    done(null, user);
+});
 
 module.exports = {
     googleStrategySignUp,
