@@ -32,8 +32,7 @@ class serviceUsers {
         }
     }
 
-
-
+    
     async removeFavourite(body) {
         try {
             const { userId, productId } = body;

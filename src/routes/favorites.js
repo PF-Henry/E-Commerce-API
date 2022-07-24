@@ -13,7 +13,7 @@ router.put('/add', async(req, res, next) => {
     } catch (error) {
         next(error);
     }
-}   // end of post
+}
 );
 
 
