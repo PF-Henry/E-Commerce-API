@@ -29,9 +29,7 @@ router.put('/remove', async(req, res, next) => {
 }   // end of post
 );
 
-
-
-
+// get all los productos favorites de un usuario
 router.get('/user/:userId', async(req, res, next) => {
     let userId = req.params.userId;
     try {
@@ -43,7 +41,7 @@ router.get('/user/:userId', async(req, res, next) => {
     }   // end of get
 );
 
-
+// get all usuarios de un producto favorito
 router.get('/product/:productId', async(req, res, next) => {
     let productId = req.params.productId;
     try {
@@ -54,9 +52,6 @@ router.get('/product/:productId', async(req, res, next) => {
     }
 }   // end of get
 );
-
-
-
 
 
 module.exports = router;

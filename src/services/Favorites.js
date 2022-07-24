@@ -23,7 +23,7 @@ class serviceUsers {
             if (!product) {
                 throw 'Product not found';
             }
-            const favourite = await user.addProducts(product);
+            await user.addProducts(product); // se agrega el producto al usuario
 
             return { msg: 'Favorite added successfully' };
         } catch (error) {
@@ -44,7 +44,8 @@ class serviceUsers {
             if (!product) {
                 throw 'Product not found';
             }
-            const favourite = await user.removeProducts(product);
+            await user.removeProducts(product); // se remueve el producto al usuario
+            
             return { msg: 'Favorite removed successfully' };
         } catch (error) {
             return returnErrorMessage(error);

@@ -36,7 +36,7 @@ class serviceCategories {
         const { name } = category;
         try {
             if (!name) {
-                throw 'Name is requerid field';
+                throw 'Name is requerid field.';
             }
 
             const regCategory = { name };
