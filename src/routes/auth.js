@@ -22,8 +22,8 @@ router.get("/logout", (req, res, next) => {
 router.get("/google/callback",
     passport.authenticate("googleSignUp", {
         session: false,
-        failureRedirect: "http://localhost:3001/api/auth/register/failed",
-        // failureRedirect: `${API_URL}/api/auth/register/failed`,
+        // failureRedirect: "http://localhost:3001/api/auth/register/failed",
+        failureRedirect: `${API_URL}/api/auth/register/failed`,
         // successRedirect: "http://localhost:3001/api/auth/login/success",
         scope: [
             'https://www.googleapis.com/auth/userinfo.profile',
@@ -45,8 +45,8 @@ router.get("/google/callback",
 router.get("/google/signin",
     passport.authenticate("googleSignIn", {
         session: false,
-        failureRedirect: "http://localhost:3001/api/auth/login/failed",
-        // failureRedirect: `${API_URL}/api/auth/login/failed`,
+        // failureRedirect: "http://localhost:3001/api/auth/login/failed",
+        failureRedirect: `${API_URL}/api/auth/login/failed`,
         // successRedirect: "http://localhost:3001/api/auth/login/success",
         scope: [
             'https://www.googleapis.com/auth/userinfo.profile',
