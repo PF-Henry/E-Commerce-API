@@ -1,18 +1,19 @@
 const router = require("express").Router();
 const { request } = require("express");
+const { session } = require("passport");
 const passport = require("passport");
 
-const CLIENT_URL = "https://hexatech-store.netlify.app";
+// const CLIENT_URL = "https://hexatech-store.netlify.app";
 const API_URL = "https://hexatech-api.herokuapp.com";
 
-// const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "http://localhost:3000";
 // const API_URL = "http://localhost:3001";
 const { signToken, verifyToken } = require("../utils/jwt");
 
-
+let cookie = '';
 
 router.get("/logout", (req, res, next) => {
-    res.clearCookie('cookie');
+    cookie = ''; // Clear the cookie
     res.redirect(CLIENT_URL);
 });
 
@@ -31,9 +32,11 @@ router.get("/google/callback",
         ]
     }),
     (req, res, next) => {
-        let message = 'Registro exitoso - Ahora inicia session';
-        res.cookie('error', message);
-        res.redirect(`${CLIENT_URL}/login`);
+        if (req.user) {
+            let message = 'Registro exitoso - Ahora inicia session';
+            res.cookie('message', message, { sameSite: 'none', secure: true });
+            res.redirect(`${API_URL}/api/auth/register`);
+        }
     }
 );
 
@@ -52,22 +55,72 @@ router.get("/google/signin",
         ]
     }),
     (req, res, next) => {
-        const token = signToken(req.user);
-        res.cookie("token", token);
-        res.redirect(CLIENT_URL);
+        if (req.user) {
+            console.log('user', req.user);
+            const token = signToken(req.user);
+            res.cookie('token', token, { sameSite: 'none', secure: true, httpOnly: false });
+            res.redirect(`${API_URL}/api/auth/login`);
+        }
     }
 );
 
-router.get("/register/failed", (req, res) => {
-    let message = 'El usuario ya existe - Ahora inicia session';
-    res.cookie('error', message);
-    res.redirect(`${CLIENT_URL}/login`);
+router.get("/login/failed", (req, res, next) => {
+    let message = 'Acceso denegado - Debes registrarte';
+    res.cookie('loginError', message, { sameSite: 'none', secure: true });
+    res.redirect(`${API_URL}/api/auth/register`);
 });
 
-router.get("/login/failed", (req, res) => {
-    let message = 'Acceso denegado - Debes registrarte';
-    res.cookie('error', message);
-    res.redirect(`${CLIENT_URL}/register`);
+router.get("/login", (req, res) => {
+    if (req.headers.origin !== CLIENT_URL) {
+        if (req.cookies.registerError) {
+            cookie = req.cookies.registerError;
+            res.clearCookie('registerError');
+            return res.redirect(`${CLIENT_URL}/login`);
+        }
+        if (req.cookies.loginError) {
+            cookie = req.cookies.loginError;
+            res.clearCookie('loginError');
+            return res.redirect(`${CLIENT_URL}/register`);
+        }
+        if (req.cookies.token) {
+            cookie = req.cookies.token;
+            res.clearCookie('token');
+            return res.redirect(CLIENT_URL);
+        }
+    }
+
+    if (req.headers.origin === CLIENT_URL) {
+        return res.json({ cookie: cookie });
+    }
+});
+
+router.get("/register/failed", (req, res, next) => {
+    let message = 'El usuario ya existe - Inicia sesion';
+    res.cookie('registerError', message, { sameSite: 'none', secure: true });
+    res.redirect(`${API_URL}/api/auth/login`);
+});
+
+router.get("/register", (req, res) => {
+    if (req.headers.origin !== CLIENT_URL) {
+        if (req.cookies.loginError) {
+            cookie = req.cookies.loginError;
+            res.clearCookie('loginError');
+            return res.redirect(`${CLIENT_URL}/register`);
+        }
+        if (req.cookies.registerError) {
+            cookie = req.cookies.registerError;
+            res.clearCookie('registerError');
+            return res.redirect(`${CLIENT_URL}/login`);
+        }
+        if (req.cookies.message) {
+            cookie = req.cookies.message;
+            res.clearCookie('message');
+            return res.redirect(`${CLIENT_URL}/login`);
+        }
+    }
+    if (req.headers.origin === CLIENT_URL) {
+        return res.json({ cookie: cookie });
+    }
 });
 
 

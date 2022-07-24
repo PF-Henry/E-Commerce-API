@@ -10,11 +10,12 @@ const routerRoles = require('./roles');
 const routerAuth = require('./auth');
 const routerPermissions = require('./permissions');
 const routerConfigDb = require('./configDb');
+const routerFavorites = require('./favorites');
 
 
 const router = express.Router();
 
-// Configurar los routers
+// Configurar los routers //
 
 router.use('/reviews', routerReviews);
 router.use('/orders', routerOrders);
@@ -27,6 +28,7 @@ router.use('/roles', routerRoles);
 router.use('/auth', routerAuth);
 router.use('/permissions', routerPermissions);
 router.use('/configDb', routerConfigDb);
+router.use('/favorites', routerFavorites);
 
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
@@ -8,6 +9,8 @@ const passport = require('passport');
 require('./db.js');
 
 const server = express();
+const session = require('express-session');
+const { Cookie } = require('express-session');
 
 server.name = 'API';
 
@@ -24,6 +27,28 @@ server.use((req, res, next) => {
 });
 
 require('./authentication/index.js');
+server.set("trust proxy", 1);
+server.use(
+    session({
+        secret: 'secretKey',
+        resave: true,
+        saveUninitialized: false,
+        cookie: {
+            path: '/',
+
+            // sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
+            sameSite: 'none',
+
+            // secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
+            secure: true,
+            hhttpOnly: false,
+        }
+    })
+);
+
+// server.use(cookieSession({ name: 'session', keys: ['key1', 'key2'] }));
+
+
 // server.use(passport.initialize());
 
 server.use('/api', routes);

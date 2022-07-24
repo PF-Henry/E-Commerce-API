@@ -43,7 +43,7 @@ class serviceProducts {
                             }
                         ]
                     },
-                    attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId'],
+                    attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId', 'state'],
                     include: [{
                             model: Categories,
                             attributes: ['id', 'name']
@@ -71,7 +71,7 @@ class serviceProducts {
                     },
                     include: [{
                         model: Products,
-                        attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId'],
+                        attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId', 'state'],
                         include: [{
                                 model: Brands,
                                 attributes: ['id', 'name']
@@ -87,7 +87,7 @@ class serviceProducts {
             }
 
             return await Products.findAll({
-                attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId'],
+                attributes: ['id', 'name', 'description', 'technical_especification', 'price', 'stock', 'brandId', 'state'],
                 include: [{
                         model: Categories,
                         attributes: ['id', 'name']
@@ -110,7 +110,7 @@ class serviceProducts {
     async getById(id) {
         try {
             let product = await Products.findByPk(id, {
-                include: [Categories, Brands, Images, Reviews] //Falta incluir Reviews
+                include: [Categories, Brands, Images] //Falta incluir Reviews
             });
             if (!product) {
                 throw "Product not found";
@@ -137,7 +137,7 @@ class serviceProducts {
                 throw 'Stock must be greater than or equal to 0';
             }
 
-        
+
             const arrayCategories = JSON.parse(categories);
             if (!arrayCategories || !Array.isArray(arrayCategories)) { // check that categories is not null and check is an array
                 throw 'The product must have at least one Category ';
@@ -147,8 +147,8 @@ class serviceProducts {
             let brandFounded = await Brands.findOne({
                 where: { name: brand }
             });
-            
-          
+
+
 
             const regProduct = {
                 name,
@@ -160,10 +160,10 @@ class serviceProducts {
                 state: false,
             }
 
-                
+
             const newProduct = await Products.create(regProduct);
-                    
-        
+
+
 
             const categoriesPromises = arrayCategories.map(async(cat) => {
                 let category = await Categories.findAll({
@@ -171,25 +171,25 @@ class serviceProducts {
                 });
                 return newProduct.setCategories(category); //la asociacion la realiza como objeto
             });
-        
+
             await Promise.all(categoriesPromises);
 
-            
-                   
+
+
             // ------------------------------------------- upload Images --------------------------------------------------
-            const fileName = product.fileName;           
-            let arrBuffer =[];
+            const fileName = product.fileName;
+            let arrBuffer = [];
             if (Array.isArray(fileName)) {
-                arrBuffer = fileName.map((b64string) =>{
-                    const b64 = b64string.split(';base64,').pop();    
+                arrBuffer = fileName.map((b64string) => {
+                    const b64 = b64string.split(';base64,').pop();
                     return Buffer.from(b64, 'base64');
-                } );
+                });
             } else {
-                const b642= fileName.split(';base64,').pop();
+                const b642 = fileName.split(';base64,').pop();
                 arrBuffer.push(Buffer.from(b642, 'base64'));
             }
 
-    
+
             // obtener el nombre del servidor 
             //const serverName = process.env.SERVER_NAME;
 
@@ -198,28 +198,28 @@ class serviceProducts {
             const serverName = protocol + "://" + req.get("host") + "/api/";
 
             let arrayImages = []; // guarada los nombres de las imagenes para las url
-            arrBuffer.forEach(async (buffer64, index) => {
+            arrBuffer.forEach(async(buffer64, index) => {
                 const uuid = uuidv4();
-                const strFileName = uuid + ".png";  // nombre de la imgagen optimizada
+                const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
 
                 const urlImagen = serverName + "products/images/" + strFileName;
                 arrayImages.push(urlImagen);
 
                 const processedImage = sharp(buffer64).resize(300, 300, {
-                            fit: 'contain',
-                            background: { r: 0, g: 0, b: 0, alpha: 0 }
-                            }).png();
+                    fit: 'contain',
+                    background: { r: 0, g: 0, b: 0, alpha: 0 }
+                }).png();
                 const buffer = await processedImage.toBuffer(); // .options.input.buffer
 
                 fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
             });
             // ------------------------------------------- upload Images --------------------------------------------------
 
-            
-            
+
+
             // insertar la imagenes a la base de datos ------------------------
             const imagesPromisesCreate = arrayImages.map(async(img) => {
-                  let image = await Images.create({
+                let image = await Images.create({
                     url_image: img
                 });
                 return image;
