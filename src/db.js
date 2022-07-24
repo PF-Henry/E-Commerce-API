@@ -77,6 +77,7 @@ Products.belongsToMany(Orders, { through: 'Orders_Products' });
 Users.belongsToMany(Products, { through: 'Users_Products' }); //** Favorites */
 Products.belongsToMany(Users, { through: 'Users_Products' });
 
+
 Brands.hasMany(Products); // brands has many products
 Products.belongsTo(Brands); // Product belongs to brand
 
