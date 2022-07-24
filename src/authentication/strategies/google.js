@@ -18,7 +18,7 @@ const googleStrategySignUp = new Strategy({
         try {
             const userByEmail = await service.getByEmail(profile.emails[0].value);
             if (userByEmail) {
-                done(null, false);
+                done(null, false); //* Erorr: User already exists
             } else {
                 const newUser = {
                     first_name: profile.name.givenName,
