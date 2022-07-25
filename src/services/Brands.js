@@ -60,6 +60,11 @@ class serviceBrands {
             if (!name) {
                 throw 'Name and image are required';
             }
+
+            if (name.lenth > 20) {
+                throw 'Brand name is requerid.';
+            }
+            
             let brand = await Brands.findByPk(id);
             if (!brand) {
                 throw "Brand not found";
