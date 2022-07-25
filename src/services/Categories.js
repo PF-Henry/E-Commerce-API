@@ -36,7 +36,11 @@ class serviceCategories {
         const { name } = category;
         try {
             if (!name) {
-                throw 'Name is requerid field.';
+                throw 'Category name is requerid.';
+            }
+
+            if (name.lenth > 20) {
+                throw 'Category name is requerid.';
             }
 
             const regCategory = { name };
@@ -52,6 +56,18 @@ class serviceCategories {
 
     async update(id, category) {
         try {
+
+            const name = category.name;
+
+            if (!name) {
+                throw 'Category name is requerid.';
+            }
+
+            if (name.lenth > 20) {
+                throw 'Category name is requerid.';
+            }
+
+
             let response = await Categories.update(category, {
                 where: {
                     id: id
