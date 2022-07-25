@@ -1,6 +1,6 @@
 'use strict';
 
-const { Orders, Orders_Items, Products } = require("../db.js");
+const { Orders, OrdersItems, Products } = require("../db.js");
 const returnErrorMessage = require("../utils/msgErrors.js");
 
 class serviceOrders {
