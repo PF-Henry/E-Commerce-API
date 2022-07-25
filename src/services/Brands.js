@@ -34,13 +34,17 @@ class serviceBrands {
 
 
     async create(brand) {
-        const { name, image } = brand;
+        const { name } = brand;
         try {
-            if (!name || !image) {
-                throw 'Name or Image is requerid field.';
+            if (!name) {
+                throw 'Brand name is requerid field.';
             }
 
-            const regBrand = { name, image };
+            if (name.lenth > 20) {
+                throw 'Brand name is requerid.';
+            }
+
+            const regBrand = { name };
 
             await Brands.create(regBrand);
 
@@ -51,9 +55,9 @@ class serviceBrands {
         }
     }
 
-    async update(id, name, image) {
+    async update(id, name) {
         try {
-            if (!name && !image) {
+            if (!name) {
                 throw 'Name and image are required';
             }
             let brand = await Brands.findByPk(id);
@@ -61,7 +65,6 @@ class serviceBrands {
                 throw "Brand not found";
             }
             if (name) brand.name = name;
-            if (image) brand.image = image;
             await brand.save();
 
             return { msg: "Update Brand sucessufully" }

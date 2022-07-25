@@ -9,9 +9,7 @@ const { v4: uuidv4 } = require('uuid');
 const { dirname } = require('path');
 // ---------------------------------- implementation upload ----------------------------------
 
-
 const returnErrorMessage = require("../utils/msgErrors.js");
-const { ARRAY } = require('sequelize');
 
 
 class serviceProducts {
@@ -123,10 +121,10 @@ class serviceProducts {
     }
 
     async create(product, req) {
-        const { name, description, technical_especification, price, stock, categories, images, brand } = product;
+        const { name, description, technical_especification, price, stock, categories, images, brand, state } = product;
         try {
-            if (!name || !description || !technical_especification || !price || !stock || !categories) {
-                throw 'Name, Description, Thecnical Description, Price, Stock and Categories are requerid fields.';
+            if (!name || !description || !technical_especification || !price || !stock || !categories || !state) {
+                throw 'Name, Description, Thecnical Description, Price, Stock, State and Categories are requerid fields.';
             }
 
             if (parseFloat(price) <= 0) {
@@ -149,7 +147,6 @@ class serviceProducts {
             });
 
 
-
             const regProduct = {
                 name,
                 description,
@@ -157,12 +154,10 @@ class serviceProducts {
                 price,
                 stock,
                 brandId: brandFounded.dataValues.id,
-                state: false,
+                state
             }
 
-
             const newProduct = await Products.create(regProduct);
-
 
 
             const categoriesPromises = arrayCategories.map(async(cat) => {
@@ -189,11 +184,7 @@ class serviceProducts {
                 arrBuffer.push(Buffer.from(b642, 'base64'));
             }
 
-
             // obtener el nombre del servidor 
-            //const serverName = process.env.SERVER_NAME;
-
-
             const protocol = req.protocol;
             const serverName = protocol + "://" + req.get("host") + "/api/";
 
