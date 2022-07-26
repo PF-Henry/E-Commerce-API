@@ -18,6 +18,27 @@ router.get('/', async(req, res, next) => {
     }
 });
 
+// router.get('/', async(req, res, next) => {
+//     const first_name = req.query.first_name
+//     const last_name = req.query.last_name 
+//     try {
+//         const response = await service.getAll();
+//         if(first_name || last_name){
+//             let responseUserName =  await response.filter(e => e.first_name.toLowerCase()===(first_name.toLowerCase()))
+//             let responseUserLastName = await response.filter(e => e.last_name.toLowerCase()===(last_name.toLowerCase()))
+//             if(responseUserName.length){
+//                 res.status(200).send(responseUserName)
+//             } else if(responseUserLastName.length){
+//                 res.status(200).send(responseUserLastName)
+//             }
+//             res.status(404).send('This user does not exist')
+//         }
+//         res.status(200).json(response);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
+
 router.post('/register', async(req, res, next) => {
     const body = req.body;
     try {

@@ -10,13 +10,21 @@ const checkPermissions = require('../middlewares/checkPermissions.js');
 
 
 router.get('/', async(req, res, next) => {
+    const name = req.query.name//y
     try {
         const response = await service.getAll();
-        res.status(200).json(response);
+        if(name){
+            response.length ?
+            res.status(200).send(response) :
+            res.status(404).send('This brand does not exist')
+        } else {
+            res.status(200).json(response);
+        }     
     } catch (error) {
         next(error);
     }
 });
+
 
 router.get('/:id',
     // passport.authenticate('jwt', { session: false }),

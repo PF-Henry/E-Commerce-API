@@ -8,12 +8,22 @@ class serviceBrands {
         this.brands = [];
     }
 
-    async getAll() {
+    async getAll(name) {
         try {
-            return await Brands.findAll({
-                order: ['name'],
-                attributes: ['id', 'name', 'image']
-            });
+            if (name) {
+                return await Brands.findAll({
+                    where: {
+                            name: {[Op.iLike]: `%${name}%`}
+                            },
+                    order: ['name'],
+                    attributes: ['id', 'name', 'image']
+                        })
+            } else {
+                return await Brands.findAll({
+                    order: ['name'],
+                    attributes: ['id', 'name', 'image']
+                })
+                    }
         } catch (error) {
             return returnErrorMessage(error);
         }
