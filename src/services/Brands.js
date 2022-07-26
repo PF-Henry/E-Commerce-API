@@ -16,12 +16,12 @@ class serviceBrands {
                             name: {[Op.iLike]: `%${name}%`}
                             },
                     order: ['name'],
-                    attributes: ['id', 'name', 'image']
+                    attributes: ['id', 'name']
                         })
             } else {
                 return await Brands.findAll({
                     order: ['name'],
-                    attributes: ['id', 'name', 'image']
+                    attributes: ['id', 'name']
                 })
                     }
         } catch (error) {
