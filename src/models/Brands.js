@@ -8,10 +8,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(20),
             allowNull: false,
             unique: true,
-        },
+        }/*,
         image: {
             type: DataTypes.STRING,
             allowNull: false,
-        }
+        }*/
     });
 };
