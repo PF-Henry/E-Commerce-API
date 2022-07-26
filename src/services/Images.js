@@ -9,8 +9,7 @@ class serviceImages {
 
     async getAll() {
         try {
-            return await Images.findAll({
-            });
+            return await Images.findAll({});
         } catch (error) {
             return error;
         }
@@ -28,9 +27,9 @@ class serviceImages {
                 throw 'URL image is requerid field.';
             }
 
-            const regCategory = { url_image };
+            const regImage = { url_image };
 
-            // const newCategory = await Images.create(regCategory);
+            const newImage = await Images.create(regImage);
 
             return { msg: 'The image was created successfully' };
 
@@ -50,8 +49,8 @@ class serviceImages {
             return error;
         }
     }
-    
-    
+
+
     async delete(id) {
         try {
             return await Images.destroy({
