@@ -10,17 +10,35 @@ class serviceUsers {
         this.users = [];
     }
 
-    async getAll() {
+    async getAll(name) {
         try {
-            const users = await Users.findAll({
-                // attributes: ['id', 'first_name', 'last_name', 'email'],
-                include: [{
-                    model: Roles,
-                    attributes: ['id', 'name'],
-                    include: Permissions
-                }]
-            });
-            return users;
+            if (name) {
+                return await Users.findAll(
+                    {where: {
+                            
+                        [Op.or]: [{first_name:{[Op.iLike]: `%${name}%`}},{last_name:{[Op.iLike]: `%${name}%`}}]     
+                        },
+                order: [['last_name', "asc"], ['first_name',"asc"]],
+                // attributes: ['id', 'name']
+                    attributes: {exclude: ['password']},
+                    include: [{
+                        model: Roles,
+                        attributes: ['id', 'name'],
+                        include: Permissions
+                    }]
+                }
+                   )
+            } else {
+                const users = await Users.findAll({
+                    attributes: {exclude: ['password']},
+                    include: [{
+                        model: Roles,
+                        attributes: ['id', 'name'],
+                        include: Permissions
+                    }]
+                });
+                return users;
+                    }  
         } catch (error) {
             return returnErrorMessage(error);
         }
@@ -80,11 +98,12 @@ class serviceUsers {
                 password: hashedPassword,
                 roleId: roleFound.id
             });
-            await user.addRole(roleFound);
+            //await user.addRoles(roleFound);
 
             // return { ...user.dataValues, password: null };
             return { msg: 'User created successfully' };
         } catch (error) {
+            console.log(error)
             return returnErrorMessage(error);
         }
     }

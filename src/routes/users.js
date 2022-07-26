@@ -10,13 +10,21 @@ const { signToken, verifyToken } = require('../utils/jwt');
 
 
 router.get('/', async(req, res, next) => {
+    const name = req.query.name;
     try {
-        const response = await service.getAll();
-        res.status(200).json(response);
+        const response = await service.getAll(name);
+        if(name){
+            response.length ?
+            res.status(200).send(response) :
+            res.status(404).send({error:'This user does not exist'})
+        } else {
+            res.status(200).json(response);
+        }     
     } catch (error) {
         next(error);
     }
 });
+
 
 router.post('/register', async(req, res, next) => {
     const body = req.body;

@@ -23,7 +23,8 @@ module.exports = (sequelize) => {
         },
         state:{
             type: DataTypes.ENUM('created', 'processing', 'cancelled', 'complete'),
-            allowNull: false
+            allowNull: false,
+            defaultValues: 'created'
         }
     });
 };

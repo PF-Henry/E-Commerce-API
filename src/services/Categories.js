@@ -8,12 +8,22 @@ class serviceCategories {
         this.categories = [];
     }
 
-    async getAll() {
+    async getAll(name) {
         try {
-            return await Categories.findAll({
-                order: ['name'],
-                attributes: ['id', 'name']
-            });
+            if (name) {
+                return await Categories.findAll({
+                    where: {
+                            name: {[Op.iLike]: `%${name}%`}
+                            },
+                    order: ['name'],
+                    attributes: ['id', 'name']
+                        })
+            } else {
+                return await Categories.findAll({
+                    order: ['name'],
+                    attributes: ['id', 'name']
+                })
+                    }
         } catch (error) {
             return returnErrorMessage(error);
         }
