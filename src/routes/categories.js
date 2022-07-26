@@ -12,11 +12,11 @@ const checkPermissions = require('../middlewares/checkPermissions.js');
 router.get('/', async(req, res, next) => {
     const name = req.query.name//y
     try {
-        const response = await service.getAll();
+        const response = await service.getAll(name);
         if(name){
             response.length ?
             res.status(200).send(response) :
-            res.status(404).send('This brand does not exist')
+            res.status(404).send({error:'This brand does not exist'})
         } else {
             res.status(200).json(response);
         }     
