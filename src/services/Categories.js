@@ -1,6 +1,7 @@
 'use strict';
 
 const { Categories } = require("../db.js");
+const {Op} = require("sequelize");
 const returnErrorMessage = require("../utils/msgErrors.js");
 
 class serviceCategories {

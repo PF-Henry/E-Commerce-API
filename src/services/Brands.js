@@ -1,6 +1,7 @@
 'use strict';
 
 const { Brands } = require("../db.js");
+const {Op} = require("sequelize");
 const returnErrorMessage = require("../utils/msgErrors.js");
 
 class serviceBrands {
@@ -12,12 +13,10 @@ class serviceBrands {
         try {
             if (name) {
                 return await Brands.findAll({
-                    where: {
-                            name: {[Op.iLike]: `%${name}%`}
-                            },
+                    where: {name:{[Op.iLike]: `%${name}%`}},
                     order: ['name'],
                     attributes: ['id', 'name']
-                        })
+                })
             } else {
                 return await Brands.findAll({
                     order: ['name'],
