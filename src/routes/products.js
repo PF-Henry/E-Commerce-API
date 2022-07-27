@@ -48,11 +48,12 @@ router.post('/', upload.array('fileName'), async(req, res, next) => {
     }
 });
 
-router.put('/:id', async(req, res, next) => {
+//router.put('/:id', async(req, res, next) => {
+router.put('/:id', upload.array('fileName'), async(req, res, next) => {    
     let { id } = req.params;
     let body = req.body;
     try {
-        const response = await service.update(id, body);
+        const response = await service.update(id, body, req);
         res.status(200).json(response);
     } catch (error) {
         next(error);
