@@ -239,13 +239,12 @@ class serviceProducts {
 
 
 
-    async update(id, product) {
+    async update(id, product, req) {
 
-        const { name, description, technical_especification, price, stock, categories, images, brand } = product;
+        const { name, description, technical_especification, price, stock, categories, images, brand, state } = product;
         try {
-
-            if (!name || !description || !technical_especification || !price || !stock || !categories) {
-                throw 'Name, Description, Thecnical Description, Price, Stock and Categories are requerid fields.';
+            if (!name || !description || !technical_especification || !price || !stock || !categories || !state) {
+                throw 'Name, Description, Thecnical Description, Price, Stock, State and Categories are requerid fields.';
             }
 
             if (parseFloat(price) <= 0) {
@@ -256,28 +255,55 @@ class serviceProducts {
                 throw 'Stock must be greater than or equal to 0';
             }
 
-            if (!categories || !Array.isArray(categories)) { // check that categories is not null and check is an array
+
+            const arrayCategories = JSON.parse(categories);
+            if (!arrayCategories || !Array.isArray(arrayCategories)) { // check that categories is not null and check is an array
                 throw 'The product must have at least one Category ';
             }
+
+
+            // borrar las imagenes primero antes de actualizar el producto
+            // ============================================================ eliminar imagenes del directorio optimized
+            let imageProduct = await Products.findByPk(id);
+            if (!imageProduct) {
+                throw "Product not found";
+            }
+
+            let arrayImagesDelete = await imageProduct.getImages();
+            if (arrayImagesDelete.length > 0) {
+                arrayImagesDelete.forEach(async(image) => {
+                    try {
+                        const strImageDelete = image.dataValues.url_image.split('/').pop(); 
+                        fs.unlinkSync(process.cwd() + '/optimized/' + strImageDelete);
+                    }   catch (error) {
+                        
+                    }                    
+                }
+                );
+            }
+            // ============================================================ eliminar imagenes del directorio optimized
+
+
+
 
             let brandFounded = await Brands.findOne({
                 where: { name: brand }
             });
 
-            if (!brandFounded) {
-                throw 'The brand does not exist';
-            }
 
-            const updateProduct = {
+            const regProduct = {
                 name,
                 description,
                 technical_especification,
                 price,
                 stock,
-                brandId: brandFounded.dataValues.id
+                brandId: brandFounded.dataValues.id,
+                state
             }
 
-            let response = await Products.update(updateProduct, {
+
+
+            let response = await Products.update(regProduct, {
                 where: {
                     id: id
                 }
@@ -287,34 +313,87 @@ class serviceProducts {
                 throw "Product not found";
             }
 
-            let productUpdated = await Products.findByPk(id)
+            let updateProduct = await Products.findByPk(id)
 
-            const categoriesPromises = categories.map(async(cat) => {
+
+            const categoriesPromises = arrayCategories.map(async(cat) => {
                 let category = await Categories.findAll({
                     where: { name: cat.name }
                 });
-
-                return productUpdated.setCategories(category); //la asociacion la realiza como objeto
+                return updateProduct.setCategories(category); //la asociacion la realiza como objeto
             });
 
-            const imagesPromises = images.map(async(img) => {
+            await Promise.all(categoriesPromises);
+
+
+
+            // ------------------------------------------- upload Images --------------------------------------------------
+            const fileName = product.fileName;
+            let arrBuffer = [];
+            if (Array.isArray(fileName)) {
+                arrBuffer = fileName.map((b64string) => {
+                    const b64 = b64string.split(';base64,').pop();
+                    return Buffer.from(b64, 'base64');
+                });
+            } else {
+                const b642 = fileName.split(';base64,').pop();
+                arrBuffer.push(Buffer.from(b642, 'base64'));
+            }
+
+            // obtener el nombre del servidor 
+            const protocol = req.protocol;
+            const serverName = protocol + "://" + req.get("host") + "/api/";
+
+            let arrayImages = []; // guarada los nombres de las imagenes para las url
+            arrBuffer.forEach(async(buffer64, index) => {
+                const uuid = uuidv4();
+                const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
+
+                const urlImagen = serverName + "products/images/" + strFileName;
+                arrayImages.push(urlImagen);
+
+                const processedImage = sharp(buffer64).resize(300, 300, {
+                    fit: 'contain',
+                    background: { r: 0, g: 0, b: 0, alpha: 0 }
+                }).png();
+                const buffer = await processedImage.toBuffer(); // .options.input.buffer
+
+                fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
+            });
+            // ------------------------------------------- upload Images --------------------------------------------------
+
+
+
+            // insertar la imagenes a la base de datos ------------------------
+            const imagesPromisesCreate = arrayImages.map(async(img) => {
+                let image = await Images.create({
+                    url_image: img
+                });
+                return image;
+            });
+            await Promise.all(imagesPromisesCreate);
+
+
+            // realizar la asociación con productos y imagenes -----------------
+            const imagesPromises = arrayImages.map(async(img) => {
                 let image = await Images.findAll({
                     where: { url_image: img }
                 });
 
-                return productUpdated.setImages(image); //la asociacion la realiza como objeto
+                return updateProduct.setImages(image); //la asociacion la realiza como objeto
             });
+            await Promise.all(imagesPromises);
 
-            await Promise.all(categoriesPromises, imagesPromises);
 
-
-            return { msg: 'The products was updated successfully' };
-
+            return { msg: 'The products was created successfully' };
 
         } catch (error) {
-            return returnErrorMessage(error);
-        };
+            return returnErrorMessage(error)
+        }
+
     }
+
+
 
     async delete(id) {
         try {
