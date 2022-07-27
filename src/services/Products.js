@@ -385,7 +385,7 @@ class serviceProducts {
             await Promise.all(imagesPromises);
 
 
-            return { msg: 'The products was created successfully' };
+            return { msg: 'The products was update successfully' };
 
         } catch (error) {
             return returnErrorMessage(error)
