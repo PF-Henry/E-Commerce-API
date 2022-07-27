@@ -28,7 +28,7 @@ router.get("/google/callback",
     (req, res, next) => {
         if (req.user) {
             // let message = 'Registro exitoso - Ahora inicia session';
-            let message = { msg: 'Registro exitoso - Ahora inicia session' };
+            let message = { msg: 'Successfully registered user - Login now' };
             res.cookie('message', message, { sameSite: 'none', secure: true });
             res.redirect(`${API_URL}/api/auth/register`);
         }
@@ -62,7 +62,7 @@ router.get("/google/signin",
 
 router.get("/login/failed", (req, res, next) => {
     // let message = 'Acceso denegado - Debes registrarte';
-    let message = { error: 'Acceso denegado - Debes registrarte' };
+    let message = { error: 'Access denied - First register' };
     res.cookie('loginError', message, { sameSite: 'none', secure: true });
     res.redirect(`${API_URL}/api/auth/register`);
 });
@@ -96,7 +96,7 @@ router.get("/login", (req, res) => {
 
 router.get("/register/failed", (req, res, next) => {
     // let message = 'El usuario ya existe - Inicia sesion';
-    let message = { error: 'El usuario ya existe - Inicia sesion' };
+    let message = { error: 'User already exists - Login now' };
     res.cookie('registerError', message, { sameSite: 'none', secure: true });
     res.redirect(`${API_URL}/api/auth/login`);
 });
