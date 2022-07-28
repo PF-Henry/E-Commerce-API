@@ -46,12 +46,12 @@ const uploadImage = async (imagePath) => {
       use_filename: true,
       unique_filename: false,
       overwrite: true,
+      securte: true,
     };
 
     try {
       // Upload the image
       const result = await cloudinary.uploader.upload(imagePath, options);
-      console.log("cloudnary:",result);
       return result.secure_url; //public_id;
     } catch (error) {
       console.error(error);
@@ -241,8 +241,11 @@ class serviceProducts {
             const protocol = req.protocol;
             const serverName = protocol + "://" + req.get("host") + "/api/";
 
-            let arrayImages = []; // guarada los nombres de las imagenes para las url
-            arrBuffer.forEach(async(buffer64, index) => {
+            //let arrayImages = []; // guarada los nombres de las imagenes para las url
+            
+            //arrBuffer.forEach(async(buffer64, index) => {
+            const arrayCloudinaryPromises = 
+                arrBuffer.map(async(buffer64, index) => {                
                 const uuid = uuidv4();
                 const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
 
@@ -259,21 +262,20 @@ class serviceProducts {
                 fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
 
                 const imageCloudynary = process.cwd() + '/optimized/' + strFileName;
-
-                uploadImage(imageCloudynary);
-                arrayImages.push(urlImagen);
- 
+                const imagedLoaded = await uploadImage(imageCloudynary);
+                console.log("*====== secureUrl:",imagedLoaded);
+                //arrayImages = [...arrayImages , imagedLoaded];
+                return imagedLoaded;
             });
             // ------------------------------------------- upload Images --------------------------------------------------
 
+            const arrayImages = await Promise.all(arrayCloudinaryPromises);          
             // --- pasarla a cloudinary y guardarla en la base de datos
-
-            // -------------------------
-
-
-
+                        
             // insertar la imagenes a la base de datos ------------------------
             const imagesPromisesCreate = arrayImages.map(async(img) => {
+
+                console.log("IMAGEN PARA GUARDAR:",img);
                 let image = await Images.create({
                     url_image: img
                 });
@@ -333,18 +335,18 @@ class serviceProducts {
                 throw "Product not found";
             }
 
-            let arrayImagesDelete = await imageProduct.getImages();
-            if (arrayImagesDelete.length > 0) {
-                arrayImagesDelete.forEach(async(image) => {
-                    try {
-                        const strImageDelete = image.dataValues.url_image.split('/').pop(); 
-                        fs.unlinkSync(process.cwd() + '/optimized/' + strImageDelete);
-                    }   catch (error) {
+            // let arrayImagesDelete = await imageProduct.getImages();
+            // if (arrayImagesDelete.length > 0) {
+            //     arrayImagesDelete.forEach(async(image) => {
+            //         try {
+            //             const strImageDelete = image.dataValues.url_image.split('/').pop(); 
+            //             fs.unlinkSync(process.cwd() + '/optimized/' + strImageDelete);
+            //         }   catch (error) {
                         
-                    }                    
-                }
-                );
-            }
+            //         }                    
+            //     }
+            //     );
+            // }
             // ============================================================ eliminar imagenes del directorio optimized
 
 
@@ -408,22 +410,58 @@ class serviceProducts {
             const protocol = req.protocol;
             const serverName = protocol + "://" + req.get("host") + "/api/";
 
-            let arrayImages = []; // guarada los nombres de las imagenes para las url
-            arrBuffer.forEach(async(buffer64, index) => {
-                const uuid = uuidv4();
-                const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
 
-                const urlImagen = serverName + "products/images/" + strFileName;
-                arrayImages.push(urlImagen);
 
-                const processedImage = sharp(buffer64).resize(300, 300, {
-                    fit: 'contain',
-                    background: { r: 0, g: 0, b: 0, alpha: 0 }
-                }).png();
-                const buffer = await processedImage.toBuffer(); // .options.input.buffer
+            // *****************
+            // let arrayImages = []; // guarada los nombres de las imagenes para las url
+            // arrBuffer.forEach(async(buffer64, index) => {
+            //     const uuid = uuidv4();
+            //     const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
 
-                fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
-            });
+            //     const urlImagen = serverName + "products/images/" + strFileName;
+            //     arrayImages.push(urlImagen);
+
+            //     const processedImage = sharp(buffer64).resize(300, 300, {
+            //         fit: 'contain',
+            //         background: { r: 0, g: 0, b: 0, alpha: 0 }
+            //     }).png();
+            //     const buffer = await processedImage.toBuffer(); // .options.input.buffer
+
+            //     fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
+            // });
+
+
+
+            const arrayCloudinaryPromises = 
+            arrBuffer.map(async(buffer64, index) => {                
+            const uuid = uuidv4();
+            const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
+
+            const urlImagen = serverName + "products/images/" + strFileName;
+            //arrayImages.push(urlImagen);
+
+            const processedImage = sharp(buffer64).resize(300, 300, {
+                fit: 'contain',
+                background: { r: 0, g: 0, b: 0, alpha: 0 }
+            }).png();
+            const buffer = await processedImage.toBuffer(); // .options.input.buffer
+
+
+            fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
+
+            const imageCloudynary = process.cwd() + '/optimized/' + strFileName;
+            const imagedLoaded = await uploadImage(imageCloudynary);
+            console.log("*====== secureUrl:",imagedLoaded);
+            //arrayImages = [...arrayImages , imagedLoaded];
+            return imagedLoaded;
+        });
+        // ------------------------------------------- upload Images --------------------------------------------------
+
+        const arrayImages = await Promise.all(arrayCloudinaryPromises);          
+
+
+
+
             // ------------------------------------------- upload Images --------------------------------------------------
 
 
