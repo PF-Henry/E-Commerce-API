@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cors = require('cors');
 const routes = require('./routes/index.js');
 const passport = require('passport');
 
@@ -14,8 +15,12 @@ const { Cookie } = require('express-session');
 
 server.name = 'API';
 
+
+
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
+
+server.use(cors());
 server.use(cookieParser());
 server.use(morgan('dev'));
 server.use((req, res, next) => {

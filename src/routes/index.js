@@ -11,6 +11,7 @@ const routerAuth = require('./auth');
 const routerPermissions = require('./permissions');
 const routerConfigDb = require('./configDb');
 const routerFavorites = require('./favorites');
+const routerMercadoPago = require('./mercadoPago');
 
 
 const router = express.Router();
@@ -29,6 +30,7 @@ router.use('/auth', routerAuth);
 router.use('/permissions', routerPermissions);
 router.use('/configDb', routerConfigDb);
 router.use('/favorites', routerFavorites);
+router.use('/mercadoPago', routerMercadoPago);
 
 
 module.exports = router;
