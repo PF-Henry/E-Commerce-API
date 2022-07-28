@@ -7,15 +7,68 @@ const sharp = require('sharp');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const { dirname } = require('path');
+
+// Require the cloudinary library
+const cloudinary = require('cloudinary').v2;
+
+// Return "https" URLs by setting secure: true
+// cloudinary.config({
+//   secure: true
+// });
+
+
+cloudinary.config({ 
+    cloud_name: 'dsvu8zpd1', 
+    api_key: '391599671867836', 
+    api_secret: 'qOJpTCyYY-HNVoLLy34ami5Ig4k' 
+  });
+
+
+// Log the configuration
+//console.log(cloudinary.config());
+
 // ---------------------------------- implementation upload ----------------------------------
 
 const returnErrorMessage = require("../utils/msgErrors.js");
+
+
+
+
+
+/////////////////////////
+// Uploads an image file
+/////////////////////////
+const uploadImage = async (imagePath) => {
+
+    // Use the uploaded file's name as the asset's public ID and 
+    // allow overwriting the asset with new versions
+    const options = {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: true,
+    };
+
+    try {
+      // Upload the image
+      const result = await cloudinary.uploader.upload(imagePath, options);
+      console.log("cloudnary:",result);
+      return result.secure_url; //public_id;
+    } catch (error) {
+      console.error(error);
+    }
+};
 
 
 class serviceProducts {
     constructor() {
         this.products = [];
     }
+
+
+
+
+
+
 
     async getAll(name, category) {
 
@@ -194,7 +247,7 @@ class serviceProducts {
                 const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
 
                 const urlImagen = serverName + "products/images/" + strFileName;
-                arrayImages.push(urlImagen);
+                //arrayImages.push(urlImagen);
 
                 const processedImage = sharp(buffer64).resize(300, 300, {
                     fit: 'contain',
@@ -202,9 +255,20 @@ class serviceProducts {
                 }).png();
                 const buffer = await processedImage.toBuffer(); // .options.input.buffer
 
+
                 fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
+
+                const imageCloudynary = process.cwd() + '/optimized/' + strFileName;
+
+                uploadImage(imageCloudynary);
+                arrayImages.push(urlImagen);
+ 
             });
             // ------------------------------------------- upload Images --------------------------------------------------
+
+            // --- pasarla a cloudinary y guardarla en la base de datos
+
+            // -------------------------
 
 
 
