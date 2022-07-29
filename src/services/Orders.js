@@ -45,6 +45,14 @@ class serviceOrders {
                 throw "Order not created";
             }
 
+            // buscar el usuario con userId, y luego hacer un agregado a las ordernes del usuario.
+            // const user = await Users.findByPk(userId);
+            // if(!user){
+            //     throw "User not found";
+            // }
+            // user.addOrders(newOrder);
+
+
             //crear orderItems
 
 
