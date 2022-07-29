@@ -22,27 +22,27 @@ router.post("/create_preference", (req, res) => {
     console.log(" ----------------------------------- ");
 
     // DESTRUCTURACION DEL CARRITO -------------------------
-    const  userId  = req.body.userId;
-    const  orderItems = req.body.orderItems;
+    // const  userId  = req.body.userId;
+    // const  orderItems = req.body.orderItems;
 
-    const preferenceOrderItem = orderItems.map(item => {
-        return {
-            title: item.name,
-	        unit_price: item.price,
-		    quantity: item.quantity,
-        }
-    });
+    // const preferenceOrderItem = orderItems.map(item => {
+    //     return {
+    //         title: item.name,
+	//         unit_price: item.price,
+	// 	    quantity: item.quantity,
+    //     }
+    // });
       
     
     // ARMADO DEL ARCHIVO DE PREFERENCIA  
 	let preference = {
 		//items: preferenceOrderItem,
         items: 
-            {
+            [{
 				title: "bicicleta 3 ruedas",
 				unit_price: 152,
 				quantity: 2,
-			},	
+			}],	
 		back_urls: {
 			"success": `${HTTP_ORIGIN}/auth/feedback`,
 			"failure": `${HTTP_ORIGIN}/auth/feedback`,
