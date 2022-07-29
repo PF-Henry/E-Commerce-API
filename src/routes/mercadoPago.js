@@ -38,11 +38,6 @@ router.post("/create_preference", (req, res) => {
 				unit_price: Number(req.body.price),
 				quantity: Number(req.body.quantity),
 			},
-            {
-				title: req.body.description,
-				unit_price: Number(req.body.price),
-				quantity: Number(req.body.quantity),
-			}
 		],
 		back_urls: {
 			"success": `${HTTP_ORIGIN}/success.html`,
