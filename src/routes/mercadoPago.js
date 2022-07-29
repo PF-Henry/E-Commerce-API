@@ -29,15 +29,15 @@ router.post("/create_preference", (req, res) => {
 	let preference = {
 		items: [
 			{
-				title: req.body.description,
-				unit_price: Number(req.body.price),
-				quantity: Number(req.body.quantity),
+				title: "Camisa de fuerza",
+				unit_price: 5,
+				quantity: 1,
 			},
-            {
-				title: req.body.description,
-				unit_price: Number(req.body.price),
-				quantity: Number(req.body.quantity),
-			},
+            // {
+			// 	title: req.body.description,
+			// 	unit_price: Number(req.body.price),
+			// 	quantity: Number(req.body.quantity),
+			// },
 		],
 		back_urls: {
 			"success": `${HTTP_ORIGIN}/success.html`,
