@@ -5,13 +5,10 @@ const mercadopago = require("mercadopago");
 
 // REPLACE WITH YOUR ACCESS TOKEN AVAILABLE IN: https://developers.mercadopago.com/panel
 mercadopago.configure({
-    access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
-	//access_token: "TEST-3352840888653824-082717-2089459f87c4aa1e9d28f7ea67610f6b-13551993", // qutiles.
+    //access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
+	access_token: "TEST-3352840888653824-082717-2089459f87c4aa1e9d28f7ea67610f6b-13551993", // qutiles.
 });
   
-
-
-
 
 
 
@@ -101,7 +98,7 @@ router.post("/notificacion", (req, res) => {
         // curl -X GET \
         // 'https://api.mercadopago.com/v1/payments/{id}' \
         // -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' 
-        
+
         return res.send("OK");
     }
 
