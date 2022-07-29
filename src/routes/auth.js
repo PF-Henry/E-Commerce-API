@@ -6,6 +6,8 @@ const passport = require("passport");
 const CLIENT_URL = "https://hexatech-store.netlify.app";
 const API_URL = "https://hexatech-api.herokuapp.com";
 
+// CLIENT_URL = req.headers.origin;
+
 // const CLIENT_URL = "http://localhost:3000";
 // const API_URL = "http://localhost:3001";
 const { signToken, verifyToken } = require("../utils/jwt");
@@ -64,12 +66,12 @@ router.get("/login", (req, res) => {
         if (req.cookies.registerError) {
             cookie = req.cookies.registerError;
             res.clearCookie('registerError');
-            return res.redirect(`${CLIENT_URL}/login`);
+            return res.redirect(`${CLIENT_URL}/auth/login`);
         }
         if (req.cookies.loginError) {
             cookie = req.cookies.loginError;
             res.clearCookie('loginError');
-            return res.redirect(`${CLIENT_URL}/register`);
+            return res.redirect(`${CLIENT_URL}/auth/register`);
         }
         if (req.cookies.token) {
             cookie = req.cookies.token;
@@ -97,17 +99,17 @@ router.get("/register", (req, res) => {
         if (req.cookies.loginError) {
             cookie = req.cookies.loginError;
             res.clearCookie('loginError');
-            return res.redirect(`${CLIENT_URL}/register`);
+            return res.redirect(`${CLIENT_URL}/auth/register`);
         }
         if (req.cookies.registerError) {
             cookie = req.cookies.registerError;
             res.clearCookie('registerError');
-            return res.redirect(`${CLIENT_URL}/login`);
+            return res.redirect(`${CLIENT_URL}/auth/login`);
         }
         if (req.cookies.message) {
             cookie = req.cookies.message;
             res.clearCookie('message');
-            return res.redirect(`${CLIENT_URL}/login`);
+            return res.redirect(`${CLIENT_URL}/auth/login`);
         }
     }
     if (req.headers.origin === CLIENT_URL) {
