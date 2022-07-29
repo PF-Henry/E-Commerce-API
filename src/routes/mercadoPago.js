@@ -11,7 +11,6 @@ mercadopago.configure({
   
 
 
-
 router.post("/create_preference", (req, res) => {
 	
     // obtener el nombre del servidor 
@@ -22,27 +21,32 @@ router.post("/create_preference", (req, res) => {
     console.log("HTTP_ORIGIN: " + HTTP_ORIGIN);
     console.log(" ----------------------------------- ");
 
-    // DESTRUCTURIN DEL CARRITO
+    // DESTRUCTURACION DEL CARRITO -------------------------
+    const  userId  = req.body.userId;
+    const  orderItems = req.body.orderItems;
+
+    const preferenceOrderItem = orderItems.map(item => {
+        return {
+            title: item.name,
+	        unit_price: item.price,
+		    quantity: item.quantity,
+        }
+    });
+      
     
     // ARMADO DEL ARCHIVO DE PREFERENCIA  
-
 	let preference = {
-		items: [
-			{
-				title: "Camisa de fuerza",
-				unit_price: 5,
-				quantity: 1,
-			},
-            // {
-			// 	title: req.body.description,
-			// 	unit_price: Number(req.body.price),
-			// 	quantity: Number(req.body.quantity),
-			// },
-		],
+		//items: preferenceOrderItem,
+        items: 
+            {
+				title: "bicicleta 3 ruedas",
+				unit_price: 152,
+				quantity: 2,
+			},	
 		back_urls: {
-			"success": `${HTTP_ORIGIN}/success.html`,
-			"failure": `${HTTP_ORIGIN}/failure.html`,
-			"pending": `${HTTP_ORIGIN}/pending.html`,
+			"success": `${HTTP_ORIGIN}/auth/feedback`,
+			"failure": `${HTTP_ORIGIN}/auth/feedback`,
+			"pending": `${HTTP_ORIGIN}/auth/feedback`,
 		},
         auto_return: "approved",
       //  notification_url: `${SERVER_NAME}/notification`,	
@@ -79,6 +83,7 @@ router.post("/create_preference", (req, res) => {
 router.post("/notificacion", (req, res) => {
     console.log(req.body);
     const { topic, id } = req.body.query;
+
     if (topic === "merchant_order") {
         // do something with the order id
         console.log(id);
