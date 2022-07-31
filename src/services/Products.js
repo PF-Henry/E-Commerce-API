@@ -379,7 +379,7 @@ class serviceProducts {
                 throw "Product not found";
             }
 
-            let updateProduct = await Products.findByPk(id)
+            let updateProduct = await Products.findByPk(id);
 
 
             const categoriesPromises = arrayCategories.map(async(cat) => {
@@ -434,33 +434,30 @@ class serviceProducts {
 
             const arrayCloudinaryPromises = 
             arrBuffer.map(async(buffer64, index) => {                
-            const uuid = uuidv4();
-            const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
+                const uuid = uuidv4();
+                const strFileName = uuid + ".png"; // nombre de la imgagen optimizada
 
-            const urlImagen = serverName + "products/images/" + strFileName;
-            //arrayImages.push(urlImagen);
+                const urlImagen = serverName + "products/images/" + strFileName;
+                //arrayImages.push(urlImagen);
 
-            const processedImage = sharp(buffer64).resize(300, 300, {
-                fit: 'contain',
-                background: { r: 0, g: 0, b: 0, alpha: 0 }
-            }).png();
-            const buffer = await processedImage.toBuffer(); // .options.input.buffer
-
-
-            fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
-
-            const imageCloudynary = process.cwd() + '/optimized/' + strFileName;
-            const imagedLoaded = await uploadImage(imageCloudynary);
-            console.log("*====== secureUrl:",imagedLoaded);
-            //arrayImages = [...arrayImages , imagedLoaded];
-            return imagedLoaded;
-        });
-        // ------------------------------------------- upload Images --------------------------------------------------
-
-        const arrayImages = await Promise.all(arrayCloudinaryPromises);          
+                const processedImage = sharp(buffer64).resize(300, 300, {
+                    fit: 'contain',
+                    background: { r: 0, g: 0, b: 0, alpha: 0 }
+                }).png();
+                const buffer = await processedImage.toBuffer(); // .options.input.buffer
 
 
+                fs.writeFileSync(process.cwd() + '/optimized/' + strFileName, buffer);
 
+                const imageCloudynary = process.cwd() + '/optimized/' + strFileName;
+                const imagedLoaded = await uploadImage(imageCloudynary);
+                //console.log("*====== secureUrl:",imagedLoaded);
+                //arrayImages = [...arrayImages , imagedLoaded];
+                return imagedLoaded;
+            });
+            // ------------------------------------------- upload Images --------------------------------------------------
+
+            const arrayImages = await Promise.all(arrayCloudinaryPromises);          
 
             // ------------------------------------------- upload Images --------------------------------------------------
 
