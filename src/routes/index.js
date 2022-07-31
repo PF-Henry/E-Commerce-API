@@ -12,6 +12,7 @@ const routerPermissions = require('./permissions');
 const routerConfigDb = require('./configDb');
 const routerFavorites = require('./favorites');
 const routerMercadoPago = require('./mercadoPago');
+const routerSubscribe = require('./subscribe');
 
 
 const router = express.Router();
@@ -31,6 +32,7 @@ router.use('/permissions', routerPermissions);
 router.use('/configDb', routerConfigDb);
 router.use('/favorites', routerFavorites);
 router.use('/mercadoPago', routerMercadoPago);
+router.use('/subscribe', routerSubscribe);
 
 
 module.exports = router;
