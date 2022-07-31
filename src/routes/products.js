@@ -9,11 +9,9 @@ const { dirname } = require('path');
 // ---------------------------------- implementation upload ----------------------------------
 
 
-
 const serviceProducts = require('../services/Products.js');
 const service = new serviceProducts();
 
-// const { Products } = require('../db.js');
 
 
 router.get('/', async(req, res, next) => {
