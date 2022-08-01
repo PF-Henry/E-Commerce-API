@@ -3,14 +3,14 @@ const { Router } = require('express');
 const router = Router();
 
 router.get('/', async (req, res) => {
+  const email = 'electronsgm@gmail.com';
+  const subject = 'hexatech';
+  const template = 'newSubscriber';
   try{
-    const email = 'elec@ail.com';
-    const subject = 'hexatech'
-    const response = await sendEmail(email, subject)
-    console.log(response)
-    res.json(response)
+    const response = await sendEmail(email, subject, template);
+    res.json(response);
   }catch (error) {
-    res.json(error)
+    res.json(error);
   }
 
 })
