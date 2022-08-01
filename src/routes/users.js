@@ -55,17 +55,68 @@ router.post('/login',
     })
 
 
-router.put('/:id', async(req, res, next) => {
+router.put('/user/:id', async(req, res, next) => {
     const id = req.params.id;
     const body = req.body;
+    console.log(body);
     try {
-        const response = await service.findByPk(id);
-        await service.update(body);
-        res.status(200).json(user);
+        const response = await service.updateProfileUser(id, body);
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }
-})
+});
+
+
+router.put('/admin/:id', async(req, res, next) => {
+    const id = req.params.id;
+    const body = req.body;
+    try {
+        const response = await service.updateProfileAdmin(id, body);
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+router.put('/softDelete/:id', async(req, res, next) => {
+    const id = req.params.id;
+    const state = req.body.state;
+    try {
+        const response = await service.softDelete(id, state);
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+router.put('/resetPassword/:id', async(req, res, next) => {
+    const id = req.params.id;
+    const state = req.body.state;
+    try {
+        const response = await service.resetPassword(id, state);
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+router.put('/changeRole/:id', async(req, res, next) => {
+    const id = req.params.id;
+    const role = req.body.role;
+    try {
+        const response = await service.changeRole(id, role);
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
 
 router.delete('/:id', async(req, res, next) => {
     const { id } = req.params;

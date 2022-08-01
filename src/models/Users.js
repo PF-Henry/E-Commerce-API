@@ -52,7 +52,7 @@ module.exports = (sequelize) => {
             defaultValue: false
         },
         state: {
-            type: DataTypes.BOOLEAN, //* true = activo, false = inactivo
+            type: DataTypes.BOOLEAN, //* true = activo, false = inactivo soft_delete
         }
     });
 };

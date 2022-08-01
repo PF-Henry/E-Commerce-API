@@ -1,29 +1,45 @@
 const { Router } = require('express');
 const router = Router();
 
-const { Orders } = require('../db.js');
+// const { Orders } = require('../db.js');
+
+const serviceOrders = require('../services/Orders.js');
+const service = new serviceOrders();
 
 
 router.get('/', async(req, res, next) => {
     try {
-        const orders = await Orders.findAll();
+        const response = await service.getAll();
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+router.get('/user/:userId', async(req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const orders = await service.getOrdersByUser(userId);
         res.status(200).json(orders);
     } catch (error) {
         next(error);
     }
 });
 
-router.post('/', async(req, res, next) => {
-    try {
-        const order = await Orders.create(req.body);
-        res.status(201).json(order);
-    } catch (error) {
-        next(error);
-    }
-})
+
+// router.post('/', async(req, res, next) => {
+//     try {
+//         const order = await Orders.create(req.body);
+//         res.status(201).json(order);
+//     } catch (error) {
+//         next(error);
+//     }
+// })
 
 router.put('/:id', async(req, res, next) => {
     try {
+        const { orderId } = req.params;
         const order = await Orders.findByPk(req.params.id);
         await order.update(req.body);
         res.status(200).json(order);

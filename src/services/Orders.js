@@ -1,6 +1,6 @@
 'use strict';
 
-const { Orders, OrdersItems, Products } = require("../db.js");
+const { Orders, OrdersItems, Products, Users } = require("../db.js");
 const returnErrorMessage = require("../utils/msgErrors.js");
 
 class serviceOrders {
@@ -10,7 +10,11 @@ class serviceOrders {
 
     async getAll() {
         try {
-            return await Orders.findAll();
+            return await Orders.findAll(
+                {
+                    include: [{ model: Users }, { model: OrdersItems }]
+                }
+            ); 
         } catch (error) {
             return returnErrorMessage(error);
         }
@@ -27,17 +31,43 @@ class serviceOrders {
             return returnErrorMessage(error);
         }
 
+    } 
+
+
+    async getOrdersByUser(userId){
+        try {
+            const orders = await Orders.findAll(
+                {
+                    where: {
+                        userId: userId
+                    },
+                    include: [{ model: OrdersItems }]
+                }
+            ); 
+            return orders;
+        } catch (error) {
+            return returnErrorMessage(error);
+        }
     }
 
 
     async create(order) {
-        const { sell_date, sell_time, total_sell, state, orders_items } = order;
+        const { userId, sell_date, sell_time, total_sell, state, 
+            mp_order_id, mp_status, mp_order_status, orders_items } = order;
         try {
             if (!sell_date || !sell_time || !total_sell || !state || !orders_items) {
                 throw 'data not received.';
             }
 
-            const regOrder = { sell_date, sell_time, total_sell, state };
+            // VERIFICCACION DE EXISTENCIA DE USUARIO --------------------
+            // buscar el usuario con userId, y luego hacer un agregado a las ordernes del usuario.
+            const user = await Users.findByPk(userId);
+            if(!user){
+                 throw "User not found";
+            }
+
+            const regOrder = {  sell_date, sell_time, total_sell, state, 
+                                mp_order_id, mp_status, mp_order_status };
 
             const newOrder =  await Orders.create(regOrder);
             
@@ -45,9 +75,27 @@ class serviceOrders {
                 throw "Order not created";
             }
 
-            //crear orderItems
+            
+            user.addOrders(newOrder);
+
+            //crear orderItems ------------------------------------------
+
+            const itemsPromisesCreate = orders_items.map(async(item) => {
+                let itemCreate = await OrdersItems.create(item); // crear el item
+                newOrder.addOrdersItems(itemCreate);
+            });
+            await Promise.all(itemsPromisesCreate);
 
 
+            // crear descontar de stock ------------------------------------------
+            // 
+            const stockPromisesCreate = orders_items.map(async(item) => {
+                let updateProduct = await Products.findByPk(item.productId); // crear el item
+                updateProduct.stock = updateProduct.stock - item.quantity;
+                await updateProduct.save();
+            });
+            
+            await Promise.all(stockPromisesCreate);
 
             return { msg: 'The Order was created successfully' };
 
@@ -55,6 +103,41 @@ class serviceOrders {
             return returnErrorMessage(error);
         }
     }
+
+
+    // state puede ser: ENUM('created', 'processing', 'cancelled', 'complete')
+    async updateState(id, state) {
+        try {
+            const order = await Orders.findByPk(id);
+            if (!order) {
+                throw "Order not found";
+            }
+            order.state = state;
+            await order.save();
+            return { msg: 'The Order was updated successfully' };
+        } catch (error) {
+            return returnErrorMessage(error);
+        }
+    };
+
+
+   // state puede ser: ENUM('created', 'processing', 'cancelled', 'complete')
+   async updateMpState(mp_order_id, mp_order_status) {
+    try {
+        const orders = await Orders.findAll({where: {mp_order_id: mp_order_id}});
+        if (!orders) {
+            throw "Order not found";
+        }
+
+        const order = orders[0];        
+        order.mp_order_status = mp_order_status;
+        await order.save();
+        return { msg: 'The MP Status Order was updated successfully' };
+    } catch (error) {
+        return returnErrorMessage(error);
+    }
+};
+
 
     async update(id, name, image) {
         try {
@@ -77,7 +160,7 @@ class serviceOrders {
 
     async delete(id) {
         try {
-            let response = await Brands.destroy({
+            let response = await Orders.destroy({
                 where: {
                     id: id
                 }
