@@ -4,7 +4,9 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   try{
-    const response = await sendEmail()
+    const email = 'elec@ail.com';
+    const subject = 'hexatech'
+    const response = await sendEmail(email, subject)
     console.log(response)
     res.json(response)
   }catch (error) {

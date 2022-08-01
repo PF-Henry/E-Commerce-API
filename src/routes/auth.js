@@ -3,12 +3,12 @@ const { request } = require("express");
 const { session } = require("passport");
 const passport = require("passport");
 
-const CLIENT_URL = "https://hexatech-store.netlify.app";
+// const CLIENT_URL = "https://hexatech-store.netlify.app";
 const API_URL = "https://hexatech-api.herokuapp.com";
 
 // CLIENT_URL = req.headers.origin;
 
-// const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "http://localhost:3000";
 // const API_URL = "http://localhost:3001";
 const { signToken, verifyToken } = require("../utils/jwt");
 
