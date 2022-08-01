@@ -69,6 +69,7 @@ class serviceRoles {
         }
     }
 
+
     async delete(id) {
         try {
             let response = await Roles.destroy({

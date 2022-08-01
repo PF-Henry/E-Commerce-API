@@ -174,7 +174,9 @@ router.post("/notification", (req, res) => {
                 // console.log(" PN: status: ",payment.status);
                 // console.log(" PN: status_detail: ", payment.status_detail);
 
-                const responseMpState = await serviceOrders.updateMpState(payment.order.id, payment.status_detail);
+                if (payment.order.id && payment.status_detail) {
+                        const responseMpState = await serviceOrders.updateMpState(payment.order.id, payment.status_detail);
+                }
 
                 if ((payment.status === "approved") || (payment.status === "accredited")) {
                     // envio de correo de pago aprovado
