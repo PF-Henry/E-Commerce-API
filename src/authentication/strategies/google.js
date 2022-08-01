@@ -18,7 +18,6 @@ const googleStrategySignUp = new Strategy({
     async function(req, accessToken, refreshToken, profile, done) {
         try {
             const userByEmail = await service.getByEmail(profile.emails[0].value);
-            console.log('userByEmail in Google Strategy', userByEmail);
             if (userByEmail) {
                 done(null, false); //* Erorr: User already exists
             } else {
@@ -29,7 +28,8 @@ const googleStrategySignUp = new Strategy({
                     password: "",
                 }
                 const userCreated = await service.create(newUser);
-                done(null, userCreated);
+                const userByEmail = await service.getByEmail(profile.emails[0].value);
+                done(null, userByEmail);
             }
         } catch (error) {
             done(error, false);
