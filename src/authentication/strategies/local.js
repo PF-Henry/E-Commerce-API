@@ -9,14 +9,13 @@ const localStrategy = new Strategy({
 }, async(email, password, done) => {
     try {
         const user = await service.getByEmail(email);
-        console.log('user', user);
         if (!user) {
-            done({ msg: 'Invalid email' }, false);
+            return done({ error: 'Invalid email' }, false);
         }
 
         const isMatch = await comparePassword(password, user.password);
         if (!isMatch) {
-            done({ msg: 'Invalid password' }, false);
+            done({ error: 'Invalid password' }, false);
         }
         delete user.dataValues.password;
 

@@ -40,19 +40,19 @@ router.post('/login',
     passport.authenticate('local', { session: false }),
     async(req, res, next) => {
 
-        const { user } = req;
+    const { user } = req;
 
-        const payload = user;
+    const payload = user;
 
-        try {
-            const token = signToken(payload);
-            res.json({
-                token
-            });
-        } catch (error) {
-            next(error);
-        }
-    })
+    try {
+        const token = signToken(payload);
+        res.json({
+            token
+        });
+    } catch (error) {
+        next(error);
+    }
+})
 
 
 router.put('/user/:id', async(req, res, next) => {
