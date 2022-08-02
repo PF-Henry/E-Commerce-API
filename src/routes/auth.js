@@ -35,7 +35,7 @@ router.get("/google/callback",
             //*
             const message = { msg: 'Successfully registered user - Login now' };
             res.cookie('message', message, { sameSite: 'none', secure: true });
-            res.redirect(`${API_URL}/api/auth/register`);
+            return res.redirect(`${API_URL}/api/auth/register`);
         }
     }
 );
@@ -54,14 +54,15 @@ router.get("/google/signin",
     }),
     (req, res, next) => {
         if (req.user) {
+            console.log('user', req.user.state)
             if(req.user.state === false){
-                const message = { error: 'Your account is inactiv' };
+                const message = { error: 'Your account has been deactivated - Contact support pf.henry.2022@gmail.com' };
                 res.cookie('loginError', message, { sameSite: 'none', secure: true });
-                res.redirect(`${API_URL}/api/auth/register`);
+                return res.redirect(`${API_URL}/api/auth/register`);
             }
             const token = { token: signToken(req.user) }
             res.cookie('token', token, { sameSite: 'none', secure: true, httpOnly: false });
-            res.redirect(`${API_URL}/api/auth/login`);
+            return res.redirect(`${API_URL}/api/auth/login`);
         }
     }
 );
@@ -69,7 +70,7 @@ router.get("/google/signin",
 router.get("/login/failed", (req, res, next) => {
     let message = { error: 'Access denied - First register' };
     res.cookie('loginError', message, { sameSite: 'none', secure: true });
-    res.redirect(`${API_URL}/api/auth/register`);
+    return res.redirect(`${API_URL}/api/auth/register`);
 });
 
 router.get("/login", (req, res) => {
@@ -102,7 +103,7 @@ router.get("/login", (req, res) => {
 router.get("/register/failed", (req, res, next) => {
     let message = { error: 'User already exists - Login now' };
     res.cookie('registerError', message, { sameSite: 'none', secure: true });
-    res.redirect(`${API_URL}/api/auth/login`);
+    return res.redirect(`${API_URL}/api/auth/login`);
 });
 
 router.get("/register", (req, res) => {
