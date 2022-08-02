@@ -381,12 +381,14 @@ class serviceProducts {
 
             let updateProduct = await Products.findByPk(id);
 
+            
+            updateProduct.setCategories(null);
 
             const categoriesPromises = arrayCategories.map(async(cat) => {
                 let category = await Categories.findAll({
                     where: { name: cat.name }
                 });
-                return updateProduct.setCategories(category); //la asociacion la realiza como objeto
+                return updateProduct.addCategories(category); //la asociacion la realiza como objeto
             });
 
             await Promise.all(categoriesPromises);
