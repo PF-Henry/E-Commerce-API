@@ -11,8 +11,8 @@ const GOOGLE_CLIENT_SECRET = "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";
 const googleStrategySignUp = new Strategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: 'https://hexatech-api.herokuapp.com/api/auth/google/callback',
-        // callbackURL: "http://localhost:3001/api/auth/google/callback",
+        //callbackURL: 'https://hexatech-api.herokuapp.com/api/auth/google/callback',
+         callbackURL: "http://localhost:3001/api/auth/google/callback",
         passReqToCallback: true
     },
     async function(req, accessToken, refreshToken, profile, done) {
@@ -42,8 +42,8 @@ const googleStrategySignUp = new Strategy({
 const googleStrategySignIn = new Strategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        //callbackURL: "http://localhost:3001/api/auth/google/signin",
-        callbackURL: "https://hexatech-api.herokuapp.com/api/auth/google/signin",
+        callbackURL: "http://localhost:3001/api/auth/google/signin",
+        //callbackURL: "https://hexatech-api.herokuapp.com/api/auth/google/signin",
         passReqToCallback: true
     },
     async function(req, accessToken, refreshToken, profile, done) {
