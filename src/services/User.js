@@ -96,7 +96,8 @@ class serviceUsers {
             const user = await Users.create({
                 ...body,
                 password: hashedPassword,
-                roleId: roleFound.id
+                roleId: roleFound.id,
+                state: true
             });
             //await user.addRoles(roleFound);
 
