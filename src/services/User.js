@@ -123,7 +123,7 @@ class serviceUsers {
             userFound.first_name = user.first_name;
             userFound.last_name = user.last_name;
             userFound.email = user.email;
-            userFound.cellphone = user.cellphone;
+            userFound.cellphone = parseInt(user.cellphone);
             if (password.length) user.password = hashedPassword;
             await userFound.save();
             
