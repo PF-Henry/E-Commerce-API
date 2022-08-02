@@ -17,6 +17,11 @@ const localStrategy = new Strategy({
         if (!isMatch) {
             done({ error: 'Invalid password' }, false);
         }
+
+        if(!user.dataValues.state){
+            return done({ error: 'Your account is inactiv' }, false);
+        }
+
         delete user.dataValues.password;
 
         return done(null, user);

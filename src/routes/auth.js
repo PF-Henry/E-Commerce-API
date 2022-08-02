@@ -54,6 +54,11 @@ router.get("/google/signin",
     }),
     (req, res, next) => {
         if (req.user) {
+            if(req.user.state === false){
+                const message = { error: 'Your account is inactiv' };
+                res.cookie('loginError', message, { sameSite: 'none', secure: true });
+                res.redirect(`${API_URL}/api/auth/register`);
+            }
             const token = { token: signToken(req.user) }
             res.cookie('token', token, { sameSite: 'none', secure: true, httpOnly: false });
             res.redirect(`${API_URL}/api/auth/login`);
