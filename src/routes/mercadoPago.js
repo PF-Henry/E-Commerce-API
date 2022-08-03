@@ -3,9 +3,15 @@ const router = Router();
 const axios = require('axios');
 const mercadopago = require("mercadopago");
 
+const sendEmail = require("../utils/email/index.js");
+
 
 const ServiceOrders = require('../services/Orders.js');
 const serviceOrders = new ServiceOrders();
+
+const ServiceUsers = require('../services/User.js');
+const serviceUsers = new ServiceUsers();
+
 //const MERCADOPAGO_ACCESS_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN;
 const MERCADOPAGO_ACCESS_TOKEN =  "TEST-3352840888653824-082717-2089459f87c4aa1e9d28f7ea67610f6b-13551993"; // qutiles.
 
@@ -29,9 +35,9 @@ router.post("/create_preference", async (req, res) => {
     // const SERVER_HTTPS = LOCAL_TEST_SERVER + "/api/mercadoPago";            // PARA PRUEBA LOCAL    ***
     const SERVER_HTTPS = SERVER_NAME;  // <-------- para pruebas remoto
 
-    console.log("SERVER_NAME: " + SERVER_NAME);
-    console.log("HTTP_ORIGIN: " + HTTP_ORIGIN);
-    console.log(" ----------------------------------- ");
+    // console.log("SERVER_NAME: " + SERVER_NAME);
+    // console.log("HTTP_ORIGIN: " + HTTP_ORIGIN);
+    // console.log(" ----------------------------------- ");
 
     // DESTRUCTURACION DEL CARRITO -------------------------
     const  userId  = req.body.userId;
@@ -92,7 +98,7 @@ router.post("/notification", (req, res) => {
     const { topic, id } = req.query;
 
     if (topic === "merchant_order") {
-        console.log(" ============= MERCHANT ORDER Nº:" + id + " ========================= ");
+        //console.log(" ============= MERCHANT ORDER Nº:" + id + " ========================= ");
 
         axios.get(`https://api.mercadopago.com/merchant_orders/${id}`, 
                 {headers: {"Authorization": "Bearer " + MERCADOPAGO_ACCESS_TOKEN }})
@@ -147,6 +153,33 @@ router.post("/notification", (req, res) => {
                 //console.log("=========> responseOrders: ", newOrder);
 
                 // enviar correo de compra a usuario *****************************   falta
+
+                if (newOrder.id != null) {
+                    const user = await serviceUsers.getById(userId);
+
+                    const orderItems = await parseMerchantItems.map(async(item) => {
+                        let product = await servicesProducts.getById(item.productId);
+                        return {    productId: product.productId, 
+                                    name: product.name,
+                                    unit_price: parseFloat(item.unit_price),
+                                    quantity: parseInt(item.quantity),
+                                    subtotal: parseFloat(item.unit_price) * parseInt(item.quantity), };
+                    });
+
+                    const orderItemsFinal = await Promise.all(orderItems);
+
+                    const mailOptions = {
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        orderId: order.id,
+                        total_sell: merchantTotalAmount,
+                        orderItems: orderItemsFinal
+                    };
+    
+                    sendEmail(user.email, user, mailOptions, "newOrder");                 
+                }
+                
+
                 // const user = await serviceUsers.getById(userId);
                 // const userEmail = user.email;
                 // const userFirstName = user.first_name;

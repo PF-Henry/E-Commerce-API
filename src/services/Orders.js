@@ -2,6 +2,7 @@
 
 const { Orders, OrdersItems, Products, Users } = require("../db.js");
 const returnErrorMessage = require("../utils/msgErrors.js");
+const sendEmail = require("../utils/email/index.js");
 
 class serviceOrders {
     constructor() {
@@ -133,7 +134,19 @@ class serviceOrders {
             
 
             if (state === 'complete') {
-                // enviar correo de envio de orden de compra
+                
+                // enviar correo de confirmacion de orden de compra
+                const user = await Users.findByPk(order.userId);
+                const mailOptions = {
+                    first_name: user.first_name,
+                    address: user.address,
+                    location: user.location,
+                    departament: user.departament,
+                    zip_code: user.zip_code,
+                    orderId: order.id,
+                };
+
+                sendEmail(user.email, user, mailOptions, "orderSent");
 
             };
             
