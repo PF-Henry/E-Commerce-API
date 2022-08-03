@@ -112,7 +112,7 @@ class serviceOrders {
             if (!order) {
                 throw "Order not found";
             }
-            order.state = state;
+            order.state = state.toLowerCase();
             await order.save();
             return { msg: 'The Order was updated successfully' };
         } catch (error) {
