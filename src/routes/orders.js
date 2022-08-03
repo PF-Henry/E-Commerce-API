@@ -26,6 +26,16 @@ router.get('/user/:userId', async(req, res, next) => {
 });
 
 
+router.get('/:orderId', async(req, res, next) => {
+    try {
+        const { orderId } = req.params;
+        const order = await service.getOrderById(orderId);
+        res.status(200).json(order);
+    } catch (error) {
+        next(error);
+    }
+});
+
 
     
 router.put('/updateState/:orderId', async(req, res, next) => {
