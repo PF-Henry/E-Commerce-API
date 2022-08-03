@@ -28,6 +28,12 @@ function readHtmlToString(template) {
   }
 }
 
+// para dormatear numero de order
+const zerofilled = (numero) =>{
+  return ('000000'+numero).slice(-5);
+}
+
+
 function configMessage(template){
   
   const config = {
@@ -42,43 +48,52 @@ function configMessage(template){
     resetPassword: {
       msg: 'Your password has been reset successfully - Review your email for the new password',
       subject: 'Hexatech - Notifications - Password Reset'
+    },
+    newOrder: {
+      msg: 'A new purchase order has been generated  - Review your email.',
+      subject: 'Hexatech - Notifications - A new purchase order has been generated.',
+    },
+    orderSend: {
+      msg: 'Your Order has been sent - Review your email.',
+      subject: 'Hexatech - Notifications - Your Order has been sent.',
     }
+
   }
 
   return config[template]
 }
 
-function makeOrder(){
+function makeOrder(orderItems){
 
-  const order = {
+  // const order = {
    
-    orderItems: [
-      {
-        Id: '1',
-        name: 'Tv',
-        price: 12500,
-        quantity: 6,
-        total: 72500
-      },
-      {
-        Id: '1',
-        name: 'Tv',
-        price: 12500,
-        quantity: 6,
-        total: 72500
-      },
-      {
-        Id: '1',
-        name: 'Tv',
-        price: 12500,
-        quantity: 6,
-        total: 72500
-      }
-    ]
-  }
+  //   orderItems: [
+  //     {
+  //       Id: '1',
+  //       name: 'Tv',
+  //       price: 12500,
+  //       quantity: 6,
+  //       total: 72500
+  //     },
+  //     {
+  //       Id: '1',
+  //       name: 'Tv',
+  //       price: 12500,
+  //       quantity: 6,
+  //       total: 72500
+  //     },
+  //     {
+  //       Id: '1',
+  //       name: 'Tv',
+  //       price: 12500,
+  //       quantity: 6,
+  //       total: 72500
+  //     }
+  //   ]
+  // }
 
-  const itemToRowHtml = order.orderItems.map(item => {
-    return `<tr> <td>${item.Id}</td> <td>${item.name}</td> <td>${item.price}</td> <td>${item.quantity}</td> <td>${item.total}</td> </tr>`
+  const itemToRowHtml = orderItems.map(item => {
+    return `<tr> <td>${item.name}</td> <td>${item.unit_price}</td> <td>${item.quantity}</td> <td>${item.subtotal}</td> </tr>`
   })
   const arrToStr = itemToRowHtml.join('');
 
@@ -96,7 +111,11 @@ async function sendEmail(email, user, data, template){
 
   switch (template) {
     case 'newOrder':
-      contentMail = contentMail.replace('{orderItems}', makeOrder());
+      contentMail = contentMail.replace('{orderItems}', makeOrder(data.orderItems));
+      contentMail = contentMail.replace('{first_name}', data.first_name);
+      contentMail = contentMail.replace('{last_name}', data.last_name); 
+      contentMail = contentMail.replace('{orderId}', zerofilled(data.orderId)); 
+      contentMail = contentMail.replace('{total_sell}', data.total_sell);
       break;
   
     case 'newSubscriber':
@@ -110,6 +129,16 @@ async function sendEmail(email, user, data, template){
       contentMail = contentMail.replace('{user}', user);
       contentMail = contentMail.replace('{password}', data);
       break;
+
+    case 'orderSend':
+      contentMail = contentMail.replace('{firstName}', data.first_name);
+      contentMail = contentMail.replace('{orderId}', zerofilled(data.orderId));
+      contentMail = contentMail.replace('{address}', data.address);
+      contentMail = contentMail.replace('{location}', data.location);
+      contentMail = contentMail.replace('{departament}', data.departament);
+      contentMail = contentMail.replace('{zip_code}', data.zip_code);
+      break;
+
     default:
       break;
   }

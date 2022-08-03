@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
     <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
-    <title>NEW ORDER</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+    <title>ORDER SENT</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
     
     <!--[if !mso]><!-->
@@ -41,6 +41,12 @@
             mso-table-lspace: 0pt !important;
             mso-table-rspace: 0pt !important;
         }
+		
+		.email-sent {
+                font-size: 24px !important;
+                line-height: 32px !important;
+				
+         }
 
         /* What it does: Fixes webkit padding issue. Fix for Yahoo mail table alignment bug. Applies table-layout to the first 2 tables then removes for anything nested deeper. */
         table {
@@ -152,6 +158,11 @@
                 font-size: 17px !important;
                 line-height: 22px !important;
             }
+			
+			.email-sent {
+                font-size: 24px !important;
+                line-height: 22px !important;
+            }
         }
 
     </style>
@@ -173,7 +184,9 @@
                     <td bgcolor="#1c004a">
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                                <td style="padding: 30px 40px 30px 40px; text-align: center;"><img src="https://res.cloudinary.com/dsvu8zpd1/image/upload/v1659489696/Logo-Hexatech_prrj8i.jpg" width="250" height="13" alt="alt_text" border="0" style="height: auto; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #555555;"></td>
+                                <td style="padding: 30px 40px 30px 40px; text-align: center;">
+                                  <img src="https://res.cloudinary.com/dsvu8zpd1/image/upload/v1659489696/Logo-Hexatech_prrj8i.jpg" width="250" height="13" alt="alt_text" border="0" style="height: auto; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #555555;">
+                                </td>
                             </tr>
                         </table>
                     </td>
@@ -196,21 +209,34 @@
                                 <tr>
                                   <td align="center" valign="middle">
                                     
-                                  <table align="center">
-                                     <tr>
-                                         <td valign="top" style="text-align: center; padding: 20px 0 10px 20px;">
-                                     
-                                             <h1 style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 30px; line-height: 36px; color: #1c004a; font-weight: bold;">NEW ORDER!</h1>
-                                         </td>
-                                     </tr>
-                                     <tr>
-                                         <td valign="top" style="text-align: center; padding: 10px 20px 15px 20px; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #1c004a;">
-                                             <p style="margin: 0;">{first_name}, {last_name} <br>
-                                             your order Nº {orderId} has been generated and we are preparing it for dispatch.</p>
-                                             <p style="margin: 0;"><br> 
-                                             You will be notified via email.</p>
-                                         </td>
-                                     </tr> 
+                                  <table>
+                                    <tr>
+                                      <td valign="top" style="text-align: center; padding: 20px 0 10px 20px;">
+                                  
+                                          <h1 style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 30px; line-height: 36px; color: #1c004a; font-weight: bold;"> ORDER SENT!</h1>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" style="text-align: center; padding: 20px 0 10px 20px;">
+                                    
+                                            <h3 style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 30px; line-height: 36px; color: #1c004a; font-weight: bold;"> <span class="email-sent">{first_name}, you order Nº {orderId} has sent, to the fallowing address:</span></h3>
+                                            <p class="email-sent" style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 30px; line-height: 36px; color: #1c004a; font-weight: bold;">{address}</p>
+                                            <p class="email-sent" style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 30px; line-height: 36px; color: #1c004a; font-weight: bold;">{location} - {zip_code}</p>
+                                            <p class="email-sent" style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 30px; line-height: 36px; color: #1c004a; font-weight: bold;">{departament}</p>
+                                            <p class="email-sent" style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 30px; line-height: 36px; color: #1c004a; font-weight: bold;">&nbsp;</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" style="text-align: center; padding: 10px 20px 15px 20px; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #1c004a;">
+                                                <p style="margin: 0;">
+                                                  According to your request, a new password has been generated.
+                                                </p>
+                                                <p>
+                                                  <strong>Your new password is:</strong>
+                                                  {password}
+                                                </p>
+                                        </td>
+                                    </tr>
                                   </table>
 
                                   </td>
@@ -228,78 +254,13 @@
                 </tr>
                 <!-- NEW ORDER END-->
 
-                <tr>
-                    <!-- Bulletproof Background Images c/o https://backgrounds.cm -->
-                    <td background="background.png" bgcolor="#FFFFFF" align="center" valign="top" style="border-bottom: 1px solid #1c004a;  text-align: center; background-position: center center !important; background-size: cover !important; border-top: 20px solid #3ad8c1;">
-                       
-                        <div>
-                           
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:500px; margin: auto;">
-
-                                <tr>
-                                    <td height="20" style="font-size:20px; line-height:20px;">&nbsp;</td>
-                                </tr>
-
-                                <tr>
-                                  <td height="250" align="center" valign="top">
-                                    
-                                  <table width="90%" align="center">
-                                     
-                                     <tr>
-                                         <td valign="top" align="center" style="text-align: center; padding: 15px 0px 20px 0px;">
-
-                                             <!-- USER DATA -->
-                                             <center>
-                                             <table role="presentation" align="center" cellspacing="0" cellpadding="0" border="1" class="center-on-narrow" style="text-align: center; width: 100%;">
-                                                 <tr>
-                                                    <td width="40%" valign="top" style="text-align: center; padding: 10px 20px 15px 20px; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #1c004a;">
-                                                        <p style="margin: 0;">Product</p>
-                                                    </td>
-                                                    <td width="20%" valign="top" style="text-align: center; padding: 10px 20px 15px 20px; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #1c004a;">
-                                                        <p style="margin: 0;">Quantity</p>
-                                                    </td>
-                                                    <td width="20%" valign="top" style="text-align: center; padding: 10px 20px 15px 20px; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #1c004a;">
-                                                        <p style="margin: 0;">Unit Price</p>
-                                                    </td>
-                                                    <td width="20%" valign="top" style="text-align: center; padding: 10px 20px 15px 20px; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #1c004a;">
-                                                        <p style="margin: 0;">Subtotal</p>
-                                                    </td>
-                                                 </tr>
-                                                 {itemsOrder}
-                                                 <tr>
-                                                <td colspan="3" bgcolor="#3AD8C1" style="text-align: center; padding: 10px 20px 15px 20px; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #1c004a;"><p>TOTAL ORDER</p></td>
-												<td bgcolor="#3AD8C1">{total_sell}</td>	
-                                                 </tr>
-                                             </table>
-                                             </center>
-                                             <!-- USER DATA -->
-
-                                         </td>
-                                     </tr> 
-                                  </table>
-
-                                  </td>
-                                </tr>
-                            
-                                <tr>
-                                    <td height="20" style="font-size:20px; line-height:20px;">&nbsp;</td>
-                                </tr>
-
-                            </table>
-                         
-                        </div>
-                        
-                    </td>
-                </tr>
-                <!-- NEW ORDER END-->
-
 
                 <!-- FOOTER : BEGIN -->
                 <tr>
                     <td bgcolor="#3ad8c1">
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                                <td style="padding: 20px 40px 10px 40px; font-family: sans-serif; font-size: 12px; line-height: 18px; color: #1c004a; text-align: center; font-weight:normal;">
+                                <td style="padding: 10px 40px 10px 40px; font-family: sans-serif; font-size: 12px; line-height: 18px; color: #1c004a; text-align: center; font-weight:normal;">
                                     <p style="margin: 0;">LATAM</p>
                                 </td>
                             </tr>
@@ -309,7 +270,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding: 0px 40px 20px 40px; font-family: sans-serif; font-size: 12px; line-height: 18px; color: #1c004a; text-align: center; font-weight:normal;">
+                                <td style="padding: 0px 40px 10px 40px; font-family: sans-serif; font-size: 12px; line-height: 18px; color: #1c004a; text-align: center; font-weight:normal;">
                                     <p style="margin: 0;">Copyright &copy; 2022 <b>HEXATECH</b>, All Rights Reserved.</p>
                                 </td>
                             </tr>
