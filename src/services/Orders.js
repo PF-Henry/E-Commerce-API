@@ -20,14 +20,18 @@ class serviceOrders {
         }
     }
 
-    async getById(id) {
+    async getOrderById(id) {
         try {
-            let order = await Orders.findByPk(id);
+            let order = await Orders.findByPk(id,
+                {
+                    include: [{ model: Users }, { model: OrdersItems, include: [{ model: Products }] }]
+                    });
             if (!order) {
                 throw "Brand not found";
             }
             return order
         } catch (error) {
+            console.log(error);
             return returnErrorMessage(error);
         }
 
