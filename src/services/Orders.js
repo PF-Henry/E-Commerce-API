@@ -123,8 +123,9 @@ class serviceOrders {
                 const itemsPromises = items.map(async(item) => {
                     let updateProduct = await Products.findByPk(item.productId); // crear el item
                     updateProduct.stock = updateProduct.stock + parseInt(item.quantity);
-                    stock = stock + " ----->product:" + item.productId + " -STOCK:" + updateProduct.stock + " +" + item.quantity;
+                    stock = stock + "=>prod:" + item.productId + "-STCK:" + updateProduct.stock + "+" + item.quantity;
                     await updateProduct.save();
+                    stock = stock + "ACT:" + updateProduct.stock;
                 });
                 await Promise.all(itemsPromises);
             }
