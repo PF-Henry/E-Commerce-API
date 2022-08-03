@@ -152,7 +152,7 @@ router.post("/notification", (req, res) => {
                 const newOrder = await serviceOrders.create(order);
                 //console.log("=========> responseOrders: ", newOrder);
 
-                // enviar correo de compra a usuario *****************************   falta
+                // enviar correo de compra a usuario *****************************  
 
                 if (newOrder.id != null) {
                     const user = await serviceUsers.getById(userId);

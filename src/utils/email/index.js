@@ -53,7 +53,7 @@ function configMessage(template){
       msg: 'A new purchase order has been generated  - Review your email.',
       subject: 'Hexatech - Notifications - A new purchase order has been generated.',
     },
-    orderSend: {
+    orderSent: {
       msg: 'Your Order has been sent - Review your email.',
       subject: 'Hexatech - Notifications - Your Order has been sent.',
     }
@@ -130,7 +130,7 @@ async function sendEmail(email, user, data, template){
       contentMail = contentMail.replace('{password}', data);
       break;
 
-    case 'orderSend':
+    case 'orderSent':
       contentMail = contentMail.replace('{firstName}', data.first_name);
       contentMail = contentMail.replace('{orderId}', zerofilled(data.orderId));
       contentMail = contentMail.replace('{address}', data.address);
