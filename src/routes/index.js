@@ -13,6 +13,7 @@ const routerConfigDb = require('./configDb');
 const routerFavorites = require('./favorites');
 const routerMercadoPago = require('./mercadoPago');
 const routerSubscribe = require('./subscribe');
+const routerResetPassword = require('./resetPassword');
 
 
 const router = express.Router();
@@ -33,6 +34,7 @@ router.use('/configDb', routerConfigDb);
 router.use('/favorites', routerFavorites);
 router.use('/mercadoPago', routerMercadoPago);
 router.use('/subscribe', routerSubscribe);
+router.use('/resetPassword', routerResetPassword);
 
 
 module.exports = router;

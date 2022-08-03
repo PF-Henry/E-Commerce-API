@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -17,16 +17,41 @@
       height: 80px;
       width: 100%;
     }
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1 class="title">Welcome to Hexatech</h1>
+    <div class="title">
+      <img src="https://res.cloudinary.com/dsvu8zpd1/image/upload/v1659489696/Logo-Hexatech_prrj8i.jpg" width="200" height="13" alt="alt_text" border="0" style="height: auto; font-family: sans-serif; font-size: 18px; line-height: 20px; color: #555555;">
+    </div>
+    
   </header>
   <main>
-    <p>
-      Now you can periodically receive notifications in your email about new products, offers, discounts and all the benefits for customers.
-    </p>
+    <table>
+      <tr>
+        <th>REF</th>
+        <th>DESCRIPTION</th>
+        <th>PRICE</th>
+        <th>QUANTITY</th>
+        <th>TOTAL</th>
+      </tr>
+      {rows}
+    </table>
   </main>
   <footer>
     <a href="https://hexatech-store.netlify.app" target="_blank">Hexatech</a>
