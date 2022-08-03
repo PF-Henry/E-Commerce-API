@@ -2,12 +2,12 @@ const router = require("express").Router();
 const passport = require("passport");
 const sendEmail = require('../utils/email/index.js')
 
-// const CLIENT_URL = "https://hexatech-store.netlify.app";
+const CLIENT_URL = "https://hexatech-store.netlify.app";
 const API_URL = "https://hexatech-api.herokuapp.com";
 
 // CLIENT_URL = req.headers.origin;
 
-const CLIENT_URL = "http://localhost:3000";
+// const CLIENT_URL = "http://localhost:3000";
 // const API_URL = "http://localhost:3001";
 
 const { signToken } = require("../utils/jwt");
@@ -31,7 +31,6 @@ router.get("/google/callback",
             const subject = 'Hexatech - Notifications - Registered User';
             const template = 'newUser';
             const response = await sendEmail(email, subject, first_name, template);
-            console.log('send mail in auth register: ', response);
             //*
             const message = { msg: 'Successfully registered user - Login now' };
             res.cookie('message', message, { sameSite: 'none', secure: true });
