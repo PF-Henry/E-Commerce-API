@@ -116,7 +116,7 @@ class serviceOrders {
             await order.save();
 
 
-            if (state === 'cancelled') {
+            if (state === 'canceled') {
                 // restar stock de productos
                 const items = await OrdersItems.findAll({where: {orderId: id}});
                 const itemsPromises = items.map(async(item) => {
