@@ -116,12 +116,14 @@ class serviceOrders {
             await order.save();
 
 
-            if (state === 'canceled') {
+            const stock = "";
+            if (state.toLowerCase() === 'canceled') {
                 // restar stock de productos
                 const items = await OrdersItems.findAll({where: {orderId: id}});
                 const itemsPromises = items.map(async(item) => {
                     let updateProduct = await Products.findByPk(item.productId); // crear el item
                     updateProduct.stock = updateProduct.stock + parseInt(item.quantity);
+                    stock = stock + " ----->product:" + item.productId + " -STOCK:" + updateProduct.stock + item.quantity;
                     await updateProduct.save();
                 });
                 await Promise.all(itemsPromises);
@@ -132,9 +134,9 @@ class serviceOrders {
                 // enviar correo de envio de orden de compra
 
             };
+            return { msg: stock };
 
-
-            return { msg: 'The State Order was updated successfully' };
+            //return { msg: 'The State Order was updated successfully' };
         } catch (error) {
             return returnErrorMessage(error);
         }
