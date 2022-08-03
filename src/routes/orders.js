@@ -32,7 +32,6 @@ router.put('/updateState/:orderId', async(req, res, next) => {
     try {
         const { orderId } = req.params;
         const { state } = req.body;
-        console.log("ruta:", orderId, state);
         const response = await service.updateState(orderId, state);
         res.status(200).json(response);
     } catch (error) {

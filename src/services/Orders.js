@@ -105,7 +105,7 @@ class serviceOrders {
     }
 
 
-    // state puede ser: ENUM('created', 'processing', 'cancelled', 'complete')
+    // state puede ser: ENUM('created', 'processing', 'canceled', 'completed')
     async updateState(id, state) {
         try {
             const order = await Orders.findByPk(id);
@@ -121,11 +121,12 @@ class serviceOrders {
                 const items = await OrdersItems.findAll({where: {orderId: id}});
                 const itemsPromises = items.map(async(item) => {
                     let updateProduct = await Products.findByPk(item.productId); // crear el item
-                    updateProduct.stock = updateProduct.stock + item.quantity;
+                    updateProduct.stock = updateProduct.stock + parseInt(item.quantity);
                     await updateProduct.save();
                 });
                 await Promise.all(itemsPromises);
             }
+            
 
             if (state === 'complete') {
                 // enviar correo de envio de orden de compra
@@ -133,7 +134,7 @@ class serviceOrders {
             };
 
 
-            return { msg: 'The Order was updated successfully' };
+            return { msg: 'The State Order was updated successfully' };
         } catch (error) {
             return returnErrorMessage(error);
         }
