@@ -31,8 +31,8 @@ router.post("/create_preference", async (req, res) => {
     const HTTP_ORIGIN = req.headers.origin;
  
     // SE INICIA SERVIDOR CON ngrok y se obtiene el nombre del servidor para pruebas locales
-    // const LOCAL_TEST_SERVER = "https://9d1f-179-48-255-180.sa.ngrok.io";    // PARA PRUEBA LOCAL    ***
-    // const SERVER_HTTPS = LOCAL_TEST_SERVER + "/api/mercadoPago";            // PARA PRUEBA LOCAL    ***
+     // const LOCAL_TEST_SERVER = "https://71d3-179-48-255-180.sa.ngrok.io";    // PARA PRUEBA LOCAL    ***
+     // const SERVER_HTTPS = LOCAL_TEST_SERVER + "/api/mercadoPago";            // PARA PRUEBA LOCAL    ***
     const SERVER_HTTPS = SERVER_NAME;  // <-------- para pruebas remoto
 
     // console.log("SERVER_NAME: " + SERVER_NAME);
@@ -176,7 +176,9 @@ router.post("/notification", (req, res) => {
                         orderItems: orderItemsFinal
                     };
     
-                    sendEmail(user.email, user, mailOptions, "newOrder");                 
+                    const responseEmail = await sendEmail(user.email, null, mailOptions, "newOrder");                 
+                    console.log("responseEmail: ", responseEmail);
+
                 }
                 
 
