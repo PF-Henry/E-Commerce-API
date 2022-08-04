@@ -135,7 +135,7 @@ class serviceOrders {
             }
             
             let responseEmail = "";
-            if (state === 'completed') {
+            if (state.toLowerCase() === 'completed') {
                 
                 // enviar correo de confirmacion de orden de compra
                 const user = await Users.findByPk(order.userId);
@@ -149,7 +149,7 @@ class serviceOrders {
                     orderId: order.id,
                 };
 
-                let responseEmail = await sendEmail(user.email, user, mailOptions, "orderSent");
+                let responseEmail = await sendEmail(user.email, null, mailOptions, "orderSent");
 
 
             };
