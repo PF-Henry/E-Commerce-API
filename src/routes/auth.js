@@ -2,12 +2,12 @@ const router = require("express").Router();
 const passport = require("passport");
 const sendEmail = require('../utils/email/index.js')
 
- const CLIENT_URL = "https://hexatech-store.netlify.app";
+// const CLIENT_URL = "https://hexatech-store.netlify.app";
 const API_URL = "https://hexatech-api.herokuapp.com";
 
 // CLIENT_URL = req.headers.origin;
 
-//const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "http://localhost:3000";
 // const API_URL = "http://localhost:3001";
 
 const { signToken } = require("../utils/jwt");
