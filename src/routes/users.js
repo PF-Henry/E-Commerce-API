@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 
-const sendEmail = require('../utils/email/index.js')
+const { sendEmail } = require('../utils/email/index.js')
 
 const serviceUser = require('../services/User');
 const service = new serviceUser();
@@ -31,12 +31,12 @@ router.get('/', async(req, res, next) => {
 router.post('/register', async(req, res, next) => {
     const body = req.body;
     const { first_name, email} = body;
-    const subject = 'Hexatech - Notifications - Registered User';
     const template = 'newUser';
+    const data = undefined;
     try {
        
         const response = await service.create(body);
-        const emailSended = await sendEmail(email, subject, first_name, template);
+        const emailSended = await sendEmail(email, first_name, data, template);
         res.status(201).json(response);
     } catch (error) {
         next(error);

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
-const sendEmail = require('../utils/email/index.js')
+const { sendEmail } = require('../utils/email/index.js')
 
 // const CLIENT_URL = "https://hexatech-store.netlify.app";
 const API_URL = "https://hexatech-api.herokuapp.com";
@@ -28,9 +28,9 @@ router.get("/google/callback",
     async (req, res, next) => {
         if (req.user) {
             const {first_name, email} = req.user;
-            const subject = 'Hexatech - Notifications - Registered User';
             const template = 'newUser';
-            const response = await sendEmail(email, subject, first_name, template);
+            const data = undefined;
+            const response = await sendEmail(email, first_name, data, template);
             //*
             const message = { msg: 'Successfully registered user - Login now' };
             res.cookie('message', message, { sameSite: 'none', secure: true });
