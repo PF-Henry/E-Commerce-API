@@ -13,7 +13,8 @@ class serviceOrders {
         try {
             return await Orders.findAll(
                 {
-                    include: [{ model: Users }, { model: OrdersItems }]
+                    include: [{ model: Users }, { model: OrdersItems }],
+                    order: [['id', 'DESC']]
                 }
             ); 
         } catch (error) {
@@ -154,7 +155,7 @@ class serviceOrders {
             };
             
 
-            return { msg: 'The State Order was updated successfully' };
+            return { msg: 'The State Order was updated successfully' + responseEmail };
         } catch (error) {
             console.log(error);
             return returnErrorMessage(error);
