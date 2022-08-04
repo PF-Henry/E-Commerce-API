@@ -131,7 +131,7 @@ async function sendEmail(email, user, data, template){
       break;
 
     case 'orderSent':
-      contentMail = contentMail.replace('{firstName}', data.first_name);
+      contentMail = contentMail.replace('{first_Name}', data.first_name);
       contentMail = contentMail.replace('{orderId}', zerofilled(data.orderId));
       contentMail = contentMail.replace('{address}', data.address);
       contentMail = contentMail.replace('{location}', data.location);

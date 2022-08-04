@@ -2,7 +2,7 @@
 
 const { Orders, OrdersItems, Products, Users, Images } = require("../db.js");
 const returnErrorMessage = require("../utils/msgErrors.js");
-const sendEmail = require("../utils/email/index.js");
+const { sendEmail } = require("../utils/email/index.js");
 
 class serviceOrders {
     constructor() {
@@ -27,7 +27,8 @@ class serviceOrders {
             let order = await Orders.findByPk(id,
                 {
                     include: [{ model: Users }, 
-                        { model: OrdersItems, include: [{ model: Products, include: [{model: Images}] }] }]
+                        { model: OrdersItems, 
+                          include: [{ model: Products, include: [{model: Images}] }] }]
                     });
             if (!order) {
                 throw "Brand not found";
@@ -134,7 +135,6 @@ class serviceOrders {
                 await Promise.all(itemsPromises);
             }
             
-            let responseEmail = "";
             if (state.toLowerCase() === 'completed') {
                 
                 // enviar correo de confirmacion de orden de compra
@@ -149,15 +149,13 @@ class serviceOrders {
                     orderId: order.id,
                 };
 
-                let responseEmail = await sendEmail(user.email, null, mailOptions, "orderSent");
+                const responseEmail = await sendEmail(user.email, null, mailOptions, "orderSent");
+                responseEmail = mailOptions.toString();
 
+            };            
 
-            };
-            
-
-            return { msg: 'The State Order was updated successfully' + responseEmail };
+            return { msg: 'The State Order was updated successfully'};
         } catch (error) {
-            console.log(error);
             return returnErrorMessage(error);
         }
     };

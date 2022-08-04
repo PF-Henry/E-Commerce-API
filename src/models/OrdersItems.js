@@ -15,6 +15,14 @@ module.exports = (sequelize) => {
         productId:{
             type: DataTypes.INTEGER,
             allowNull: false
-        }
+        },
+        content: {
+            type: DataTypes.STRING(255),
+            allowNull: true,
+        },
+        rating:{
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
     });
 };

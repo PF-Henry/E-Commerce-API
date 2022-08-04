@@ -1,6 +1,6 @@
 'use strict';
 const { Op } = require('sequelize');
-const { Products, Categories, Brands, Images, Reviews } = require("../db.js");
+const { Products, Categories, Brands, Images, OrdersItems } = require("../db.js");
 
 // ---------------------------------- implementation upload ----------------------------------
 const sharp = require('sharp');
@@ -161,12 +161,29 @@ class serviceProducts {
     async getById(id) {
         try {
             let product = await Products.findByPk(id, {
-                include: [Categories, Brands, Images] //Falta incluir Reviews
+                include: [Categories, Brands, Images,
+                 {  model:  OrdersItems,  
+                    attributes: ['id', 'quantity', 'unit_price', 'productId', 'content', 'rating'],
+                    where : {rating : {[Op.gt]: 0}},
+                    required: false,
+                }  
+                ] 
             });
             if (!product) {
                 throw "Product not found";
             }
-            return product
+
+            // eliminar propiedad de un objeto por otro nombre
+            // pasar sequelize a json
+            product = product.toJSON();
+            const reviews = [...product.ordersItems];
+            
+            delete product.ordersItems;
+            product.reviews = reviews;
+            
+            return product;
+            //return reemplaza
+
         } catch (error) {
             return returnErrorMessage(error)
         }
@@ -274,8 +291,6 @@ class serviceProducts {
                         
             // insertar la imagenes a la base de datos ------------------------
             const imagesPromisesCreate = arrayImages.map(async(img) => {
-
-                console.log("IMAGEN PARA GUARDAR:",img);
                 let image = await Images.create({
                     url_image: img
                 });
