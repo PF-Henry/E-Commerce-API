@@ -72,6 +72,9 @@ class serviceUsers {
                     include: Permissions
                 }]
             });
+            // if(!user){
+            //     throw 'User not found';
+            // }
             return user;
         } catch (error) {
             return returnErrorMessage(error);
@@ -222,14 +225,30 @@ class serviceUsers {
             userFound.reset_password = state;           
             await userFound.save();
             
-            return { msg: 'User updated successfully' };
+            return { msg: 'Reset password successfully' };
         } catch (error) {
             console.log(error)
             return returnErrorMessage(error);
         }
     }
 
-
+    async changePassword(userId, newPassword) {
+        try {
+            const userFound = await Users.findByPk(userId);
+            if (!userFound) {
+                throw 'User not found';
+            }
+        
+            const hashedPassword = await hashPassword(newPassword);
+            userFound.password = hashedPassword;           
+            await userFound.save();
+            
+            return { msg: 'Update password successfully' };
+        } catch (error) {
+            console.log(error)
+            return returnErrorMessage(error);
+        }
+    }
 
 
     async delete(id) {
