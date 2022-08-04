@@ -1,6 +1,6 @@
 'use strict';
 
-const { Orders, OrdersItems, Products, Users } = require("../db.js");
+const { Orders, OrdersItems, Products, Users, Images } = require("../db.js");
 const returnErrorMessage = require("../utils/msgErrors.js");
 const sendEmail = require("../utils/email/index.js");
 
@@ -25,7 +25,8 @@ class serviceOrders {
         try {
             let order = await Orders.findByPk(id,
                 {
-                    include: [{ model: Users }, { model: OrdersItems, include: [{ model: Products }] }]
+                    include: [{ model: Users }, 
+                        { model: OrdersItems, include: [{ model: Products, include: [{model: Images}] }] }]
                     });
             if (!order) {
                 throw "Brand not found";
