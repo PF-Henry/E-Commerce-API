@@ -2,7 +2,9 @@
 // https://github.com/sendgrid/sendgrid-nodejs
 // javascript
 const fs = require('fs')
-const API_KEY = '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'
+
+
+const API_KEY = process.env.API_KEY;
 const sgMail = require('@sendgrid/mail')
 
 
