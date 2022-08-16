@@ -6,12 +6,12 @@ const ALGORITHM = process.env.ALGORITHM;
 
 //* Returns a token with the payload and the secret
 function signToken(payload, secret = SECRET_KEY) {
-    return jwt.sign({ payload }, secret, { EXPIRE_IN, ALGORITHM });
+    return jwt.sign({ payload }, secret, { expiresIn: EXPIRE_IN, algorithm: ALGORITHM });
 }
 
 //* Returns the payload of the token
 function verifyToken(token, secret = SECRET_KEY) {
-    return jwt.verify(token, secret, { ALGORITHM });
+    return jwt.verify(token, secret, { algorithm: ALGORITHM });
 }
 
 module.exports = {
