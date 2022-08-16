@@ -2,10 +2,9 @@ const router = require("express").Router();
 const passport = require("passport");
 const { sendEmail } = require('../utils/email/index.js')
 
-const CLIENT_URL = "https://hexatech-store.netlify.app";
-const API_URL = "https://hexatech-api.herokuapp.com";
+const CLIENT_URL = process.env.CLIENT_URL; 
+const API_URL = process.env.API_URL;
 
-// CLIENT_URL = req.headers.origin;
 
 //const CLIENT_URL = "http://localhost:3000";
 // const API_URL = "http://localhost:3001";

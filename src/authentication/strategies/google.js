@@ -4,8 +4,8 @@ const serviceUser = require("../../services/User");
 const service = new serviceUser();
 
 
-const GOOGLE_CLIENT_ID = "559232330287-ctdb2lf5f65n3mmiu1pas5gie6oa3ljo.apps.googleusercontent.com";
-const GOOGLE_CLIENT_SECRET = "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";
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID; 
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 //* Google Strategy for Signing Up
 const googleStrategySignUp = new Strategy({

@@ -5,13 +5,16 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const routes = require('./routes/index.js');
-const passport = require('passport');
+//const passport = require('passport');
+
 
 require('./db.js');
 
 const server = express();
 const session = require('express-session');
 const { Cookie } = require('express-session');
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 server.name = 'API';
 
@@ -35,7 +38,7 @@ require('./authentication/index.js');
 server.set("trust proxy", 1);
 server.use(
     session({
-        secret: 'secretKey',
+        secret: SECRET_KEY,
         resave: true,
         saveUninitialized: false,
         cookie: {

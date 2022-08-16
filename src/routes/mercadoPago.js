@@ -12,8 +12,8 @@ const serviceOrders = new ServiceOrders();
 const ServiceUsers = require('../services/User.js');
 const serviceUsers = new ServiceUsers();
 
-//const MERCADOPAGO_ACCESS_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN;
-const MERCADOPAGO_ACCESS_TOKEN =  "TEST-3352840888653824-082717-2089459f87c4aa1e9d28f7ea67610f6b-13551993"; // qutiles.
+const MERCADOPAGO_ACCESS_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN;
+
 
 // REPLACE WITH YOUR ACCESS TOKEN AVAILABLE IN: https://developers.mercadopago.com/panel
 mercadopago.configure({
